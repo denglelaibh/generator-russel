@@ -6,8 +6,8 @@ define(['knockout',
   'scripts/utils/router',
   'scripts/libs/bootstrap-modal',
   'scripts/ko-viewmodel/ko-pagination',
-  'text!./customer-blacklist.html',
-  'css!customer-blacklist'], function (ko,
+  'text!./<%= moduleName %>.html',
+  'css!<%= moduleName %>'], function (ko,
                                        validation,
                                        locale,
                                        Tool,
@@ -22,26 +22,36 @@ define(['knockout',
   var tool = new Tool();
 
   /**
-   * 功能限制构造函数
+   * <%= modelName %>构造函数
    * @param param
-   * @returns {Constraint}
+   * @returns {<%= modelName %>}
    * @constructor
    */
-  var Constraint = function (param) {
-    var constraint = param || {};
+  var <%= modelName %> = function (_param) {
+    var param = _param || {};
     var self = this;
-    self.funcNo = ko.observable(constraint.funcNo || '')
-      .extend({
-        required: true,
-        maxLength: 200
-      }); // 功能编号
-    self.custId = ko.observable(constraint.custId || ''); // 客户编号
-    self.constraintType = ko.observable(constraint.constraintType || 0); // 限制类型 0-黑名单 1-白名单 ---必填
-    self.mobile = ko.observable(constraint.mobile || ''); // 手机号,非必填
-    // 有 ID 字段才传
-    if (constraint.id || constraint.id === 0) {
-      self.id = ko.observable(constraint.id);
-    }
+    <% for(var i=0; i<attrs.length; i++) { %>
+      self.<%= attrs[i].name %> = ko.observalbe(param.<%= attrs[i].name %>
+        <% if (attrs[i].type === 'string') { %>
+        || ''
+        <% }%>
+        <% if (attrs[i].type === 'integer') { %>
+        || 0
+        <% }%>
+      );
+    <% } %>
+    // self.funcNo = ko.observable(param.funcNo || '')
+    //   .extend({
+    //     required: true,
+    //     maxLength: 200
+    //   }); // 功能编号
+    // self.custId = ko.observable(param.custId || ''); // 客户编号
+    // self.constraintType = ko.observable(param.constraintType || 0); // 限制类型 0-黑名单 1-白名单 ---必填
+    // self.mobile = ko.observable(param.mobile || ''); // 手机号,非必填
+    // // 有 ID 字段才传
+    // if (param.id || param.id === 0) {
+    //   self.id = ko.observable(param.id);
+    // }
 
     /**
      * 使用 vlaidate 观察字段是否有效

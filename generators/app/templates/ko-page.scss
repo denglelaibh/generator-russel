@@ -5,7 +5,7 @@
 @import "core/utilities";
 @import "core/components/forms";
 
-.customer-blacklist {
+.<%= moduleName %> {
   .wrapper {
     margin: 0 5px;
     background: #fff;

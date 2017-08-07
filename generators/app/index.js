@@ -19,10 +19,12 @@ module.exports = class extends Generator {
     this.argument('attributes', {
       type: Array,
       defaults: [],
-      banner: 'field[:type] field[:type]'
+      banner: 'field[:type] field[:type]',
+      required: true
     })
 
-    this.attrs = this['attributes'].map(attr => ({ name: attr.split(':')[0], type: attr.split(':')[1] || 'string' }))
+    this.attrs = this.options['attributes'].map(attr => ({ name: attr.split(':')[0], type: attr.split(':')[1] || 'string' }))
+    console.log('attrs = ', this.attrs)
   }
 
   /**
@@ -39,34 +41,81 @@ module.exports = class extends Generator {
     const prompts = [{
       type: 'input',
       name: 'moduleName',
-      message: '模块名称'
+      message: '模块名称: '
+    }, {
+      type: 'input',
+      name: 'modelName',
+      message: 'Model 名称: '
     }, {
       type: 'input',
       name: 'moduleTitle',
-      message: '页面标题'
+      message: '页面和面包屑标题: '
     }]
 
     this.prompt(prompts).then(answers => {
       this.options.moduleName = (this.options.moduleName || answers.moduleName)
       this.options.moduleTitle = (this.options.moduleTitle || answers.moduleTitle)
+      this.options.modelName = (this.options.modelName || answers.modelName)
       done()
     })
   }
 
+  /**
+   * 保存配置项同时配置项目(比如创建 .editorconfig 文件以及其他元数据文件)
+   */
   configuring () {
     this.config.set('moduleName', this.options.moduleName)
     this.config.set('moduleTitle', this.options.moduleTitle)
+    this.config.set('modelName', this.options.modelName)
   }
 
+  /**
+   * 写入 generator 相关的文件(routes, controllers 等)
+   */
   writing () {
     // Copy js file
-    this.fs.copy(this.templatePath('ko-page.js'), this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.js`))
+    //
+    this.fs.copyTpl(
+      this.templatePath('ko-page.js'),
+      this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.js`),
+      {
+        moduleName: this.options.moduleName,
+        modelName: this.options.modelName,
+        moduleTitle: this.options.moduleTitle,
+        attrs: this.attrs
+      }
+    )
+
     // Copy scss file
-    this.fs.copy(this.templatePath('ko-page.scss'), this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.scss`))
+    //
+    this.fs.copyTpl(
+      this.templatePath('ko-page.scss'),
+      this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.scss`),
+      {
+        moduleName: this.options.moduleName
+      })
+
     // Copy html file
-    this.fs.copyTpl(this.templatePath('ko-page.html'), this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.html`), { moduleName: this.options.moduleName, moduleTitle: this.options.moduleTitle })
+    this.fs.copyTpl(
+      this.templatePath('ko-page.html'),
+      this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.html`),
+      {
+        moduleName: this.options.moduleName,
+        modelName: this.options.modelName,
+        moduleTitle: this.options.moduleTitle
+      })
   }
 
+  /**
+   * 运行安装工作(比如 npm, bower)
+   */
   install () {
+  }
+
+  /**
+   * 最后调用, 清理工作
+   */
+  end () {
+
   }
 }
