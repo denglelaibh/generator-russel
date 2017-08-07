@@ -1,0 +1,36 @@
+{
+  "name": "generator-russel",
+  "version": "0.1.0",
+  "description": "",
+  "files": [
+    "generators"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/princetoad/generator-russel.git"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "fanshenggang <tom@tfan.org>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/princetoad/generator-russel/issues"
+  },
+  "homepage": "https://github.com/princetoad/generator-russel#readme",
+  "dependencies": {
+    "yeoman-generator": "1.1.1"
+  },
+  "devDependencies": {
+    "eslint": "4.4.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "2.7.0",
+    "eslint-plugin-node": "5.1.1",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "3.0.1"
+  }
+}
