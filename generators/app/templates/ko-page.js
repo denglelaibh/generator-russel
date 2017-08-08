@@ -32,26 +32,13 @@ define(['knockout',
     var self = this;
     <% for(var i=0; i<attrs.length; i++) { %>
       self.<%= attrs[i].name %> = ko.observalbe(param.<%= attrs[i].name %>
-        <% if (attrs[i].type === 'string') { %>
-        || ''
-        <% }%>
-        <% if (attrs[i].type === 'integer') { %>
-        || 0
-        <% }%>
-      );
+        <% if (attrs[i].type === 'string') { %>|| '');<% }%>
+        <% if (attrs[i].type === 'integer') { %>|| 0); <% }%>;
     <% } %>
-    // self.funcNo = ko.observable(param.funcNo || '')
-    //   .extend({
-    //     required: true,
-    //     maxLength: 200
-    //   }); // 功能编号
-    // self.custId = ko.observable(param.custId || ''); // 客户编号
-    // self.constraintType = ko.observable(param.constraintType || 0); // 限制类型 0-黑名单 1-白名单 ---必填
-    // self.mobile = ko.observable(param.mobile || ''); // 手机号,非必填
-    // // 有 ID 字段才传
-    // if (param.id || param.id === 0) {
-    //   self.id = ko.observable(param.id);
-    // }
+    // 有 ID 字段才传
+    if (param.id || param.id === 0) {
+      self.id = ko.observable(param.id);
+    }
 
     /**
      * 使用 vlaidate 观察字段是否有效
@@ -66,7 +53,7 @@ define(['knockout',
      * @returns {boolean}
      */
     self.validate = function (showMessages) {
-      var errors = ko.validation.group([self.funcNo]);
+      var errors = ko.validation.group([]);
       if (showMessages) {
         errors.showAllMessages();
       }
@@ -75,14 +62,12 @@ define(['knockout',
 
     /**
      * 提交数据时生成的 JSON
-     * @returns {{funcNo: (T | *), custId: (*|any), constraintType: (*|any), mobile: (*|any)}}
      */
     this.toJSON = function () {
       var data = {
-        funcNo: self.funcNo(),
-        custId: self.custId(),
-        constraintType: self.constraintType(),
-        mobile: self.mobile()
+        <% for(var i=0; i<attrs.length; i++) { %>
+          <%= attrs[i].name %>: self.<%= attrs[i].name %>() <% if (i !== attrs.length -1) { %>,<% } %>
+        <% }%>
       };
       if (self.id || self.id === 0) {
         data.id = self.id();
@@ -96,21 +81,32 @@ define(['knockout',
   var ViewModel = function (params) {
     var self = this;
 
-    // 限制相关
+    // 列表数据
     //
-    this.constraints = ko.observableArray([]); // 限制列表
-    this.currentConstraint = ko.observable(); // 当前新增的限制对象
-    this.availableConstraintTypes = [{
+    this.<%= modelPluralCamelName %> = ko.observableArray([]); // <%= modelUpperFirstName %>列表
+    // this.constraints = ko.observableArray([]); // <%= modelUpperFirstName %>列表
+    // 对话框数据
+    //
+    this.<%= modelCurrentName %> = ko.observable(); // 当前新增的<%= modelUpperFirstName %>对象
+
+    // chosenXXX
+    //
+    <% for (let i = 0; i < attrs.length; i++) { %>
+    this.<%= attrs[i].chosenAttrName %> = ko.observable(); // 查询条件: 选中的<%= attrs[i].name %>
+    <% } %>
+    // availableXXX
+    //
+    <% for (let i = 0; i < attrs.length; i++) { %>
+    this.<%= attrs[i].availableAttrName %> = [{
       id: 0,
-      description: '黑名单'
+      description: 'foo'
     }, {
       id: 1,
-      description: '白名单'
-    }]; // 可选的限制类型
-    this.chosenConstraintType = ko.observable(); // 查询条件: 选中的限制类型
-    this.chosenMobile = ko.observable(); // 查询条件: 选中要进行查询的手机号
-    this.chosenFuncNo = ko.observable(); // 查询条件: 选中要进行查询功能编号
+      description: 'bar'
+    }]; // 可选的 <%= attrs[i].name %>
+    <% } %>
 
+    //  TODO: 询问是否需要分页
     // 分页相关
     //
     this.pageNum = ko.observable(1);
@@ -121,7 +117,6 @@ define(['knockout',
     PaginationViewModel.apply(self, [function (pageNum, pageHandler) {
       pageHandler.call(self, self.resultData());
       self.pageNum(pageNum);
-      // self.search()
       self.getList(self.getQueryParams());
     }]);
 
@@ -139,26 +134,28 @@ define(['knockout',
      */
     init: function (params) {
       var self = this;
-      document.title = '客户黑白名单'; // 设置页面标题
+      document.title = '<%= moduleTitle %>'; // 设置页面标题
+      // document.title = '客户黑白名单'; // 设置页面标题
     },
 
     //
-    // 功能限制管理
+    // <%= moduleName %>管理
     //
     /**
      * 拼接查询列表的请求参数
      * @returns {{pageNum: *, pageSize: *, type: (*|any), funcNo: (*|any)}}
      */
     getQueryParams: function () {
+      // TODO: 增加是否是分页的判断, 增加分页参数
       var query = {
         pageNum: this.pageNum(),
-        pageSize: this.pageSize(),
-        type: this.chosenConstraintType(),
-        funcNo: this.chosenFuncNo()
+        pageSize: this.pageSize()
       };
-      if (this.chosenMobile()) {
-        query.mobile = this.chosenMobile();
-      }
+      <% for (let i = 0; i < attrs.length; i++) { %>
+        if (this.<%= attrs[i].chosenAttrName %>()) {
+          query.<%= attrs[i].name %> = this.<%= attrs[i].chosenAttrName %>();
+        }
+      <% } %>
 
       return query;
     },
@@ -181,54 +178,26 @@ define(['knockout',
     },
 
     /**
-     * 搜索限制信息
+     * 搜索 <%= modelName %> 信息
      * 示例响应:
-     * {
-        "resultCode": "00000",
-        "resultMsg": "成功",
-        "resultData": {
-          "pageSize": 10,
-          "pageNum": 1,
-          "totalPage": 1,
-          "totalCount": 2,
-          "data": [{
-            "id": 1,
-            "custId": "22",
-            "mobile": null,
-            "funcNo": "0001",
-            "constraintType": 0,
-            "state": 1,
-            "createdDate": 1499939870000,
-            "modifiedDate": 1499939870000
-          }, {
-            "id": 2,
-            "custId": null,
-            "mobile": null,
-            "funcNo": "0002",
-            "constraintType": 0,
-            "state": 1,
-            "createdDate": 1495083746000,
-            "modifiedDate": 1495083746000
-          }]
-        }
-      }
      * @param params
      */
     getList: function (params) {
       var self = this;
       tool.request({
-        url: '/fstr/getFuncConstraints',
+        url: '/<%= modelKebabName %>/get<%= modelPluralUpperFirstName %>',
         data: params,
         success: function (data) {
           var resultData = data.resultData;
           if (resultData && resultData.length !== 0) {
-            self.constraints(resultData.data);
+            self.<%= modelPluralCamelName %>(resultData.data);
+            // self.constraints(resultData.data);
             // 分页
             self.pageNum() === 1 && self.initFn(resultData);
             self.showPaginationTemplate(true);
             self.nodata(false);
           } else {
-            self.constraints([]);
+            self.<%= modelPluralCamelName %>([]);
             self.nodata(true);
           }
         },
@@ -246,21 +215,23 @@ define(['knockout',
       }
       return '--';
     },
-    getConstraintTypeText: function (id) {
-      return this.getValueById(this.availableConstraintTypes, id);
+    <% for (let i = 0; i < attrs.length; i++) { %>
+    get<%= attrs[i].upperFirstAttrName %>Text: function (id) {
+      return this.getValueById(this.<%= attrs[i].availableAttrName %>, id);
     },
+    <% }%>
 
     /**
-     * 显示添加客户黑名单对话框
+     * 显示添加 <%= modelName %>对话框
      */
-    showConstraintDialog: function () {
+    show<%= modelUpperFirstName %>Dialog: function () {
       var self = this;
-      self.currentConstraint(new Constraint());
+      self.<%= modelCurrentName %>(new <%= modelUpperFirstName %>());
 
-      $('#constraintDialog').one('shown', function (e) {
+      $('#<%= modelKebabName %>Dialog').one('shown', function (e) {
       }).one('hidden', function (e, currentTarget) {
         if (currentTarget === 'save') {
-          self.addConstraint(self.currentConstraint());
+          self.add<%= modelUpperFirstName %>(self.<%= modelCurrentName %>());
         }
       }).modal({
         show: true,
@@ -269,13 +240,13 @@ define(['knockout',
     },
 
     /**
-     * 添加限制, 成功后更新列表
+     * 添加 <%= modelName %>, 成功后更新列表
      * @param data
      */
-    addConstraint: function (data) {
+    add<%= modelUpperFirstName %>: function (data) {
       var self = this;
-      this.addConstraintRemote(data, function () {
-        // 更新限制列表
+      this.add<%= modelUpperFirstName %>Remote(data, function () {
+        // 更新<%= modelName %>列表
         self.search();
       }, function () {
         // 错误提示消息
@@ -284,33 +255,31 @@ define(['knockout',
     },
 
     /**
-     * 添加限制请求
+     * 添加<%= modelName %>请求
      * @param data
      * @param resolveHandler
      * @param rejectHandler
      */
-    addConstraintRemote: function (data, resolveHandler, rejectHandler) {
+    add<%= modelUpperFirstName %>Remote: function (data, resolveHandler, rejectHandler) {
       var self = this;
       tool.request({
-        url: '/fstr/addFuncConstraint',
+        url: '/<%= modelKebabName %>/add<%= modelUpperFirstName %>',
         data: data,
         success: resolveHandler || function () {
-          //console.log('remove successed.');
         },
         error: rejectHandler || function () {
-          //console.log('remove failed.');
         }
       });
     },
 
     /**
-     * 删除限制, 成功后更新列表
+     * 删除 <%= modelName %>, 成功后更新列表
      * @param data
      */
-    removeConstraint: function (data) {
+    remove<%= modelUpperFirstName%>: function (data) {
       var self = this;
-      this.removeRemote(data.id, function () {
-        // 更新限制列表
+      this.remove<%= modelUpperFirstName %>Remote(data.id, function () {
+        // 更新<%= modelName %>列表
         self.search();
       }, function (msg) {
         // 错误提示消息
@@ -324,16 +293,14 @@ define(['knockout',
      * @param resolveHandler
      * @param rejectHandler
      */
-    removeRemote: function (id, resolveHandler, rejectHandler) {
+    remove<%= modelUpperFirstName %>Remote: function (id, resolveHandler, rejectHandler) {
       var self = this;
       tool.request({
-        url: '/fstr/removeFuncConstraint',
+        url: '/<%= modelKebabName%>/remove<%= modelUpperFirstName%>',
         data: { id: id },
         success: resolveHandler || function () {
-          //console.log('remove successed.');
         },
         error: rejectHandler || function () {
-          //console.log('remove failed.');
         }
       });
     },
@@ -343,14 +310,14 @@ define(['knockout',
      * @param data
      * @param event
      */
-    handleDeleteConstraint: function (data, event) {
+    handleDelete<%= modelUpperFirstName %>: function (data, event) {
       event.preventDefault();
       var self = this;
-      self.confirmMessage('确定要删除该条限制吗?');
-      $('#constraintConfirmDialog').one('shown', function (e) {
+      self.confirmMessage('确定要删除该条记录吗?');
+      $('#<%= modelKebabName %>ConfirmDialog').one('shown', function (e) {
       }).one('hidden', function (e, currentTarget) {
         if (currentTarget === 'confirm') {
-          self.removeConstraint(data);
+          self.remove<%= modelUpperFirstName %>(data);
         }
       }).modal({
         show: true,
@@ -364,7 +331,7 @@ define(['knockout',
     message: function (promptMessage) {
       var self = this;
       self.promptMessage(promptMessage);
-      $('#constraintMessageDialog').one('shown', function (e) {
+      $('#<%= modelKebabName %>MessageDialog').one('shown', function (e) {
       }).one('hidden', function (e, currentTarget) {
       }).modal({
         show: true,

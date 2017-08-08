@@ -7,23 +7,17 @@
 					<div class="panel-body">
 						<form class="form-horizontal">
 							<div class="form-group">
-								<label class="control-label col-lg-3 col-md-3" for="constraint-type">限制类型: </label>
+								<% for(let i = 0; i < attrs.length; i++) {%>
+								<label class="control-label col-lg-3 col-md-3" for="search-<%= attrs[i].kebabAttrName %>"><%= attrs[i].upperFirstAttrName %>: </label>
 								<div class="col-lg-4 col-md-4">
-									<select class="form-control" id="constraint-type" data-bind="options: availableConstraintTypes, optionsText: 'description', optionsValue: 'id', value: chosenConstraintType"></select>
+									<input data-bind="textInput: <%= attrs[i].chosenAttrName %>" type="text" class="form-control input-sm mx-2" id="search-<%= attrs[i].kebabAttrName %>">
 								</div>
-								<label class="control-label col-lg-3 col-md-3" for="mobile">客户手机号: </label>
-								<div class="col-lg-4 col-md-4">
-									<input data-bind="textInput: chosenMobile" type="text" class="form-control input-sm mx-2" id="mobile">
-								</div>
-								<label class="control-label col-lg-3 col-md-3" for="func-no">功能编号: </label>
-								<div class="col-lg-4 col-md-4">
-									<input data-bind="textInput: chosenFuncNo" type="text" class="form-control input-sm mx-2" id="func-no">
-								</div>
+								<% } %>
 							</div>
 							<div class="form-group">
 								<div class="col-lg-offset-3 col-md-offset-3 col-lg-41 col-md-41">
 									<button type="button" role="button" class="bs-btn bs-btn-primary-sw bs-btn-swsize" data-bind="click: handleSearchClick">查询</button>
-									<button type="button" role="button" class="bs-btn bs-btn-default-sw bs-btn-swsize ml-3" data-bind="click: showConstraintDialog">添加</button>
+									<button type="button" role="button" class="bs-btn bs-btn-default-sw bs-btn-swsize ml-3" data-bind="click: show<%= modelUpperFirstName%>Dialog">添加</button>
 								</div>
 							</div>
 						</form>
@@ -37,23 +31,20 @@
 					<table class="bs-table bs-table-hover col-md-44">
 						<thead>
 						<tr>
-							<th>客户编号</th>
-							<th>手机号</th>
-							<th>功能编号</th>
-							<!--<th>功能名称</th>-->
-							<th>限制类型</th>
+							<% for (let i = 0; i < attrs.length; i++) {%>
+							<th><%= attrs[i].upperFirstAttrName %></th>
+							<% }%>
 							<th>操作栏</th>
 						</tr>
 						</thead>
-						<tbody data-bind="foreach: constraints">
+						<tbody data-bind="foreach: <%= modelPluralCamelName %>">
 						<tr>
-							<td data-bind="text: custId"></td>
-							<td data-bind="text: mobile"></td>
-							<td data-bind="text: funcNo"></td>
-							<td data-bind="text: constraintType"></td>
+							<% for (let i = 0; i < attrs.length; i++) {%>
+							<td data-bind="text: <%= attrs[i].name %>"></td>
+							<% }%>
 							<td>
 								<div>
-									<button data-bind="click: function (data, event) { $parent.handleDeleteConstraint(data, event); }" type="button" role="button" class="bs-btn bs-btn-link">删除</button>
+									<button data-bind="click: function (data, event) { $parent.handleDelete<%= modelUpperFirstName %>(data, event); }" type="button" role="button" class="bs-btn bs-btn-link">删除</button>
 								</div>
 							</td>
 						</tr>
@@ -65,38 +56,22 @@
 		</div>
 	</div>
 </div>
-<!--新建限制对话框-->
-<div id="constraintDialog" class="modal fade container-fluid" tabindex="-1" role="dialog" aria-labelledby="constraintModalLabel" aria-hidden="true" data-bind="with: currentConstraint">
+<!--新建<%= modelUpperFirstName %>对话框-->
+<div id="<%= modelKebabName %>Dialog" class="modal fade <%= modelKebabName %>-fluid" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>ModalLabel" aria-hidden="true" data-bind="with: <%= modelCurrentName %>">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="constraintModalLabel">新增黑名单</h3>
+		<h3 id="<%= modelKebabName %>ModalLabel">新增<%= modelUpperFirstName %></h3>
 	</div>
 	<div class="modal-body">
 		<form class="form-horizontal">
+			<% for (let i= 0; i < attrs.length; i++) {%>
 			<div class="form-group">
-				<label class="control-label col-md-4" for="func-no">功能编号*：</label>
+				<label class="control-label col-md-4" for="dialog-<%= attrs[i].kebabAttrName %>"><%= attrs[i].upperFirstAttrName %>：</label>
 				<div class="col-md-20">
-					<input data-bind="textInput: funcNo" class="form-control input-sm" type="text" id="func-no"/>
+					<input data-bind="textInput: <%= attrs[i].name %>" class="form-control input-sm" type="text" id="dialog-<%= attrs[i].kebabAttrName %>"/>
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="control-label col-md-4">限制类型*：</label>
-				<div class="col-md-20">
-					<select class="form-control" id="constraint-type" data-bind="options: $parent.availableConstraintTypes, optionsText: 'description', optionsValue: 'id', value: constraintType"></select>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-4">客户编号: </label>
-				<div class="col-md-20">
-					<input data-bind="textInput: custId" type="text" class="form-control input-sm">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="control-label col-md-4">手机号: </label>
-				<div class="col-md-20">
-					<input data-bind="textInput: mobile" type="text" class="form-control input-sm">
-				</div>
-			</div>
+			<% }%>
 			<div class="form-group">
 				<div class="col-md-offset-2 col-md-20">
 					<button type="button" role="button" class="bs-btn bs-btn-primary" data-bind="css: { disabled: inValid }, attr: { disabled: inValid }" data-id="save" data-dismiss="modal">确认</button>
@@ -106,10 +81,10 @@
 	</div>
 </div>
 <!--成功和失败 Alert-->
-<div id="constraintMessageDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="constraintMessageDialogLabel" aria-hidden="true">
+<div id="<%= modelKebabName %>MessageDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>MessageDialogLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="constraintMessageDialogLabel2">客户黑名单管理</h3>
+		<h3 id="<%= modelKebabName %>MessageDialogLabel2"><%= moduleTitle %></h3>
 	</div>
 	<div class="modal-body">
 		<p data-bind="text: promptMessage"></p>
@@ -119,10 +94,10 @@
 	</div>
 </div>
 <!--确认/取消对话框-->
-<div id="constraintConfirmDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="constraintConfirmDialogLabel" aria-hidden="true">
+<div id="<%= modelKebabName %>ConfirmDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>ConfirmDialogLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="constraintConfirmDialogLabel">客户黑名单管理</h3>
+		<h3 id="<%= modelKebabName %>ConfirmDialogLabel"><%= moduleTitle %></h3>
 	</div>
 	<div class="modal-body">
 		<p data-bind="text: confirmMessage"></p>

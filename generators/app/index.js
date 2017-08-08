@@ -1,4 +1,6 @@
 const Generator = require('yeoman-generator')
+const { camelCase, kebabCase, lowerCase, snakeCase, startCase, toLower, upperCase, upperFirst } = require('lodash');
+const pluralize = require('pluralize')
 
 module.exports = class extends Generator {
   constructor (args, opts) {
@@ -23,7 +25,14 @@ module.exports = class extends Generator {
       required: true
     })
 
-    this.attrs = this.options['attributes'].map(attr => ({ name: attr.split(':')[0], type: attr.split(':')[1] || 'string' }))
+    this.attrs = this.options['attributes'].map(attr => ({
+      name: camelCase(attr.split(':')[0]), // 属性使用 camelCase, constraintType
+      kebabAttrName: kebabCase(attr.split(':')[0]), // constraint-type
+      upperFirstAttrName: upperFirst(camelCase(attr.split(':')[0])), // ConstraintType
+      chosenAttrName: `chosen${upperFirst(camelCase(attr.split(':')[0]))}`, // chosenConstraintType
+      availableAttrName: `available${pluralize(upperFirst(camelCase(attr.split(':')[0])))}`, // availableConstraintTypes
+      type: toLower(attr.split(':')[1]) || 'string'
+    }))
     console.log('attrs = ', this.attrs)
   }
 
@@ -77,10 +86,15 @@ module.exports = class extends Generator {
     //
     this.fs.copyTpl(
       this.templatePath('ko-page.js'),
-      this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.js`),
+      this.destinationPath(`app/scripts/ko-pages/${kebabCase(this.options.moduleName)}.js`),
       {
-        moduleName: this.options.moduleName,
+        moduleName: kebabCase(this.options.moduleName),
         modelName: this.options.modelName,
+        modelKebabName: kebabCase(this.options.modelName),
+        modelPluralCamelName: pluralize(camelCase(this.options.modelName)),
+        modelPluralUpperFirstName: upperFirst(pluralize(camelCase(this.options.modelName))),
+        modelCurrentName: `current${upperFirst(camelCase(this.options.modelName))}`,
+        modelUpperFirstName: upperFirst(camelCase(this.options.modelName)),
         moduleTitle: this.options.moduleTitle,
         attrs: this.attrs
       }
@@ -100,10 +114,17 @@ module.exports = class extends Generator {
       this.templatePath('ko-page.html'),
       this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.html`),
       {
-        moduleName: this.options.moduleName,
+        moduleName: kebabCase(this.options.moduleName),
         modelName: this.options.modelName,
-        moduleTitle: this.options.moduleTitle
-      })
+        modelKebabName: kebabCase(this.options.modelName),
+        modelPluralCamelName: pluralize(camelCase(this.options.modelName)),
+        modelPluralUpperFirstName: upperFirst(pluralize(camelCase(this.options.modelName))),
+        modelCurrentName: `current${upperFirst(camelCase(this.options.modelName))}`,
+        modelUpperFirstName: upperFirst(camelCase(this.options.modelName)),
+        moduleTitle: this.options.moduleTitle,
+        attrs: this.attrs
+      }
+    )
   }
 
   /**
