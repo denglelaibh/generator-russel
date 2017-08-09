@@ -1,5 +1,5 @@
 const Generator = require('yeoman-generator')
-const { camelCase, kebabCase, lowerCase, snakeCase, startCase, toLower, upperCase, upperFirst } = require('lodash');
+const {camelCase, kebabCase, lowerCase, snakeCase, startCase, toLower, upperCase, upperFirst} = require('lodash')
 const pluralize = require('pluralize')
 const mkdirp = require('mkdirp')
 
@@ -11,6 +11,16 @@ module.exports = class extends Generator {
       desc: '输入应用名称',
       type: String,
       required: true
+    })
+    this.option('userName', {
+      desc: '你的 github 用户名',
+      type: String,
+      required: true
+    })
+    this.option('email', {
+      desc: '你的 email 地址',
+      type: String,
+      required: false
     })
   }
 
@@ -29,10 +39,20 @@ module.exports = class extends Generator {
       type: 'input',
       name: 'appName',
       message: '输入应用名称:'
+    }, {
+      type: 'input',
+      name: 'userName',
+      message: '你的 github 用户名:'
+    }, {
+      type: 'input',
+      name: 'email',
+      message: '你的 email 地址:'
     }]
 
     this.prompt(prompts).then(answers => {
       this.options.appName = (this.options.appName || answers.appName)
+      this.options.userName = (this.options.userName || answers.userName)
+      this.options.email = (this.options.email || answers.email)
       done()
     })
   }
@@ -42,6 +62,8 @@ module.exports = class extends Generator {
    */
   configuring () {
     this.config.set('appName', this.options.appName)
+    this.config.set('userName', this.options.userName)
+    this.config.set('email', this.options.email)
   }
 
   /**
@@ -51,19 +73,23 @@ module.exports = class extends Generator {
     // 在目标目录建立新的文件夹
     mkdirp(this.destinationPath('test'))
     mkdirp(this.destinationPath('build'))
-    mkdirp(this.destinationPath('src/img'))
-    mkdirp(this.destinationPath('src/js'))
-    mkdirp(this.destinationPath('src/style'))
-    mkdirp(this.destinationPath('src/vendor'))
+    mkdirp(this.destinationPath('app/images'))
+    mkdirp(this.destinationPath('app/scripts'))
+    mkdirp(this.destinationPath('app/styles'))
 
     // 拷贝文件到目标目录
     this.fs.copy(
       this.templatePath('README.md'),
       this.destinationPath('README.md')
     )
-    this.fs.copy(
+    this.fs.copyTpl(
       this.templatePath('package.json'),
-      this.destinationPath('package.json')
+      this.destinationPath('package.json'),
+      {
+        appName: kebabCase(this.options.appName),
+        userName: this.options.userName,
+        email: this.options.email
+      }
     )
     this.fs.copy(
       this.templatePath('.npmrc'),
@@ -85,7 +111,7 @@ module.exports = class extends Generator {
       this.templatePath('src/index.html'),
       this.destinationPath('src/index.html'),
       {
-        appName: camelCase(this.options.appName)
+        appName: kebabCase(this.options.appName)
       }
     )
   }
@@ -94,6 +120,10 @@ module.exports = class extends Generator {
    * 运行安装工作(比如 npm, bower)
    */
   install () {
+    const shouldInstall = !this.options['skip-install']
+    if (shouldInstall) {
+      this.npmInstall() // 只装 npm 就好了
+    }
   }
 
   /**

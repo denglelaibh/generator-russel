@@ -12,17 +12,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/princetoad/<%=appName%>.git"
+    "url": "git+https://github.com/<%=userName%>/<%=appName%>.git"
   },
-  "author": "fanshenggang <tom@tfan.org>",
+  "author": "<%=userName%> <%=email%>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/princetoad/<%=appName%>/issues"
+    "url": "https://github.com/<%=userName%>/<%=appName%>/issues"
   },
-  "homepage": "https://github.com/princetoad/<%=appName%>#readme",
+  "homepage": "https://github.com/<%=userName%>/<%=appName%>#readme",
   "devDependencies": {
-    "ava": "^0.19.1",
-    "chai": "^4.0.1",
+    "ava": "0.19.1",
+    "chai": "4.0.1",
     "eslint": "4.4.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",
