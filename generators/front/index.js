@@ -107,9 +107,17 @@ module.exports = class extends Generator {
       this.templatePath('.editorconfig'),
       this.destinationPath('.editorconfig')
     )
+    this.fs.copy(
+      this.templatePath('app/scripts/main.js'),
+      this.destinationPath('app/scripts/main.js')
+    )
+    this.fs.copy(
+      this.templatePath('app/styles/main.css'),
+      this.destinationPath('app/styles/main.css')
+    )
     this.fs.copyTpl(
-      this.templatePath('src/index.html'),
-      this.destinationPath('src/index.html'),
+      this.templatePath('app/index.html'),
+      this.destinationPath('app/index.html'),
       {
         appName: kebabCase(this.options.appName)
       }
