@@ -22,6 +22,11 @@ module.exports = class extends Generator {
       type: String,
       required: false
     })
+    this.option('useBabel', {
+      desc: '是否使用 Babel',
+      type: Boolean,
+      required: false
+    })
   }
 
   /**
@@ -47,12 +52,17 @@ module.exports = class extends Generator {
       type: 'input',
       name: 'email',
       message: '你的 email 地址:'
+    }, {
+      type: 'confirm',
+      name: 'useBabel',
+      message: '是否使用 Babel?'
     }]
 
     this.prompt(prompts).then(answers => {
       this.options.appName = (this.options.appName || answers.appName)
       this.options.userName = (this.options.userName || answers.userName)
       this.options.email = (this.options.email || answers.email)
+      this.options.useBabel = (this.options.useBabel || answers.useBabel)
       done()
     })
   }
@@ -64,6 +74,7 @@ module.exports = class extends Generator {
     this.config.set('appName', this.options.appName)
     this.config.set('userName', this.options.userName)
     this.config.set('email', this.options.email)
+    this.config.set('useBabel', this.options.useBabel)
   }
 
   /**
@@ -114,9 +125,22 @@ module.exports = class extends Generator {
       this.destinationPath('.editorconfig')
     )
     this.fs.copy(
-      this.templatePath('app/index.js'),
-      this.destinationPath('app/index.js')
+      this.templatePath('src/app.js'),
+      this.destinationPath('app/app.js')
     )
+    this.fs.copyTpl(
+      this.templatePath('src/index.js'),
+      this.destinationPath('app/index.js'),
+      {
+        useBabel: this.options.useBabel
+      }
+    )
+    if (this.options.useBabel) {
+      this.fs.copy(
+        this.templatePath('.babelrc'),
+        this.destinationPath('.babelrc')
+      )
+    }
   }
 
   /**
@@ -127,6 +151,14 @@ module.exports = class extends Generator {
     if (shouldInstall) {
       this.npmInstall() // 只装 npm 就好了
     }
+
+    const dependencies = []
+    // 如果启用了 babel,安装 async/await 相关插件
+    if (this.options.useBabel) {
+      dependencies.push('babel-plugin-syntax-async-functions')
+      dependencies.push('babel-plugin-transform-async-to-generator')
+    }
+    this.npmInstall(dependencies, { saveDev: true })
   }
 
   /**
