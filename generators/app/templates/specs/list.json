@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/queryUserImg",
+  "description": "查询用户影像信息",
+  "type": "object",
+  "properties": {
+    "resultCode": {
+      "description": "00000,成功;00001,失败",
+      "type": "string",
+      "enum": [
+        "00000",
+        "00001"
+      ]
+    },
+    "resultMsg": {
+      "description": "成功;失败",
+      "type": "string"
+    },
+    "resultData": {
+      "type": "array",
+      "description": "订单信息",
+      "items": {
+        "type": "object",
+        "properties": {
+          "imgNo": {
+            "type": "string",
+            "description": "图片编号"
+          },
+          "uploadTime": {
+            "type": "string",
+            "description": "图片上传时间"
+          },
+          "idNo": {
+            "type": "string",
+            "description": "身份证号"
+          },
+          "custName": {
+            "type": "string",
+            "description": "客户姓名"
+          },
+          "imgUrl": {
+            "type": "string",
+            "description": "图片 URL"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "手机号"
+          }
+        },
+        "required": [
+          "idNo",
+          "uploadTime",
+          "idNo",
+          "custName",
+          "imgUrl",
+          "mobile"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "resultCode",
+    "resultMsg",
+    "resultData"
+  ]
+}

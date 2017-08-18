@@ -27,11 +27,11 @@ define(['knockout',
    * @returns {<%= modelName %>}
    * @constructor
    */
-  var <%= modelName %> = function (_param) {
+  var <%= modelUpperFirstName %> = function (_param) {
     var param = _param || {};
     var self = this;
     <% for(var i=0; i<attrs.length; i++) { %>
-      self.<%= attrs[i].name %> = ko.observalbe(param.<%= attrs[i].name %>
+      self.<%= attrs[i].name %> = ko.observable(param.<%= attrs[i].name %>
         <% if (attrs[i].type === 'string') { %>|| '');<% }%>
         <% if (attrs[i].type === 'integer') { %>|| 0); <% }%>;
     <% } %>
