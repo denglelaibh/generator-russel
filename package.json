@@ -23,13 +23,14 @@
   },
   "homepage": "https://github.com/princetoad/generator-russel#readme",
   "dependencies": {
+    "command-exists": "^1.2.2",
     "lodash": "4.17.4",
     "mkdirp": "0.5.1",
     "pluralize": "6.0.0",
-    "yeoman-generator": "1.1.1"
+    "yeoman-generator": "1.1.1",
+    "yosay": "^2.0.1"
   },
   "devDependencies": {
-    "command-exists": "^1.2.2",
     "eslint": "4.4.0",
     "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "2.7.0",

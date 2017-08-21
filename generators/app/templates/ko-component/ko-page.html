@@ -1,4 +1,4 @@
-<bread-crumb params='content: "<%= moduleTitle %>"'></bread-crumb>
+<bread-crumb params='content: "<%=moduleTitle%>"'></bread-crumb>
 <div class="<%= moduleName %> container-fluid">
 	<div class="wrapper">
 		<div class="row">
@@ -7,10 +7,10 @@
 					<div class="panel-body">
 						<form class="form-horizontal">
 							<div class="form-group">
-								<% for(let i = 0; i < attrs.length; i++) {%>
-								<label class="control-label col-lg-3 col-md-3" for="search-<%= attrs[i].kebabAttrName %>"><%= attrs[i].upperFirstAttrName %>: </label>
+								<% for(let i = 0; i < formFields.length; i++) {%>
+								<label class="control-label col-lg-3 col-md-3" for="search-<%= formFields[i].kebabAttrName %>"><%= formFields[i].label%>: </label>
 								<div class="col-lg-4 col-md-4">
-									<input data-bind="textInput: <%= attrs[i].chosenAttrName %>" type="text" class="form-control input-sm mx-2" id="search-<%= attrs[i].kebabAttrName %>">
+									<input data-bind="textInput: <%= formFields[i].chosenAttrName %>" type="text" class="form-control input-sm mx-2" id="search-<%= formFields[i].kebabAttrName %>">
 								</div>
 								<% } %>
 							</div>
@@ -32,7 +32,7 @@
 						<thead>
 						<tr>
 							<% for (let i = 0; i < attrs.length; i++) {%>
-							<th><%= attrs[i].upperFirstAttrName %></th>
+							<th><%= attrs[i].label %></th>
 							<% }%>
 							<th>操作栏</th>
 						</tr>
@@ -66,7 +66,7 @@
 		<form class="form-horizontal">
 			<% for (let i= 0; i < attrs.length; i++) {%>
 			<div class="form-group">
-				<label class="control-label col-md-4" for="dialog-<%= attrs[i].kebabAttrName %>"><%= attrs[i].upperFirstAttrName %>：</label>
+				<label class="control-label col-md-4" for="dialog-<%= attrs[i].kebabAttrName %>"><%= attrs[i].label %>：</label>
 				<div class="col-md-20">
 					<input data-bind="textInput: <%= attrs[i].name %>" class="form-control input-sm" type="text" id="dialog-<%= attrs[i].kebabAttrName %>"/>
 				</div>
@@ -74,7 +74,7 @@
 			<% }%>
 			<div class="form-group">
 				<div class="col-md-offset-2 col-md-20">
-					<button type="button" role="button" class="bs-btn bs-btn-primary" data-bind="css: { disabled: inValid }, attr: { disabled: inValid }" data-id="save" data-dismiss="modal">确认</button>
+					<button type="button" role="button" class="bs-btn bs-btn-primary pull-right" data-bind="css: { disabled: inValid }, attr: { disabled: inValid }" data-id="save" data-dismiss="modal">确认</button>
 				</div>
 			</div>
 		</form>
