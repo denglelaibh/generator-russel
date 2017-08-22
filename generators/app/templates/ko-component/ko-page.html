@@ -17,7 +17,9 @@
 							<div class="form-group">
 								<div class="col-lg-offset-3 col-md-offset-3 col-lg-41 col-md-41">
 									<button type="button" role="button" class="bs-btn bs-btn-primary-sw bs-btn-swsize" data-bind="click: handleSearchClick">查询</button>
+                  <% if (actionTypes.includeCreate) {%>
 									<button type="button" role="button" class="bs-btn bs-btn-default-sw bs-btn-swsize ml-3" data-bind="click: show<%= modelUpperFirstName%>Dialog">添加</button>
+                  <%}%>
 								</div>
 							</div>
 						</form>
@@ -56,6 +58,7 @@
 		</div>
 	</div>
 </div>
+<% if (actionTypes.includeCreate) {%>
 <!--新建<%= modelUpperFirstName %>对话框-->
 <div id="<%= modelKebabName %>Dialog" class="modal fade <%= modelKebabName %>-fluid" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>ModalLabel" aria-hidden="true" data-bind="with: <%= modelCurrentName %>">
 	<div class="modal-header">
@@ -80,6 +83,7 @@
 		</form>
 	</div>
 </div>
+<%}%>
 <!--成功和失败 Alert-->
 <div id="<%= modelKebabName %>MessageDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>MessageDialogLabel" aria-hidden="true">
 	<div class="modal-header">

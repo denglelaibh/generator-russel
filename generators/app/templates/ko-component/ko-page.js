@@ -87,9 +87,11 @@ define(['knockout',
     // this.constraints = ko.observableArray([]); // <%= modelUpperFirstName %>列表
     // 新增/编辑对话框数据
     //
+    <% if (actionTypes.includeCreate || actionTypes.includeRetrieve || actionTypes.includeUpdate) {%>
     this.<%= modelCurrentName %> = ko.observable(); // 当前新增的<%= modelUpperFirstName %>对象
+    <%}%>
 
-    // chosenXXX
+    // 表单字段 - chosenXXX
     //
     <% for (let i = 0; i < formFields.length; i++) { %>
     this.<%= formFields[i].chosenAttrName %> = ko.observable(); // 查询条件: 选中的<%= formFields[i].name %>
@@ -220,6 +222,7 @@ define(['knockout',
     },
     <% }%>
 
+  <% if (actionTypes.includeCreate) {%>
     /**
      * 显示添加 <%= modelName %>对话框
      */
@@ -270,7 +273,9 @@ define(['knockout',
         }
       });
     },
+  <%}%>
 
+    <% if (actionTypes.includeDelete) {%>
     /**
      * 删除 <%= modelName %>, 成功后更新列表
      * @param data
@@ -323,6 +328,7 @@ define(['knockout',
         backdrop: true
       });
     },
+    <%}%>
 
     /**
      * Ajax 请求成功/失败的消息提示

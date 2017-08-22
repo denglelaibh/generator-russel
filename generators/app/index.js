@@ -75,6 +75,27 @@ module.exports = class extends Generator {
       name: 'formFields',
       message: '输入表单查询字段:'
     }, {
+      type: 'checkbox',
+      name: 'actionTypes',
+      message: '选择要支持的模型操作类型:',
+      choices: [{
+        name: '添加',
+        value: 'includeCreate',
+        checked: true
+      }, {
+        name: '详情',
+        value: 'includeRetrieve',
+        checked: true
+      }, {
+        name: '编辑',
+        value: 'includeUpdate',
+        checked: true
+      }, {
+        name: '删除',
+        value: 'includeDelete',
+        checked: true
+      }]
+    }, {
       type: 'confirm',
       name: 'needTest',
       message: '是否生成测试脚本?',
@@ -82,10 +103,15 @@ module.exports = class extends Generator {
     }]
 
     this.prompt(prompts).then(answers => {
+      // 模块名称
       this.options.moduleName = (this.options.moduleName || answers.moduleName)
+      // 模块标题
       this.options.moduleTitle = (this.options.moduleTitle || answers.moduleTitle)
+      // 模型名称
       this.options.modelName = (this.options.modelName || answers.modelName)
+      // 生成测试文件
       this.options.needTest = (this.options.needTest || answers.needTest)
+      // 表单字段
       this.options.formFields = (this.options.formFields || answers.formFields).trim().split(/\s/)
       console.log('this.options.formFields = ' + this.options.formFields)
       // TODO: 增加 validate, 可以考虑使用 inquirer.js 提供的 validate 方法
@@ -98,6 +124,7 @@ module.exports = class extends Generator {
         type: toLower(attr.split(':')[1]) || 'string', // 数据类型: string, integer, datetime, daterange etc.
         label: attr.split(':')[2] || camelCase(attr.split(':')[0])
       }))
+      // 模型字段 == 表格显示字段 == 新建对话框字段
       // TODO: 把两个相同的箭头函数提取一个共同方法
       this.options.attrs = (this.options.attrs || answers.attrs).trim().split(/\s/)
       console.log('this.options.attrs = ', this.options.attrs)
@@ -110,6 +137,15 @@ module.exports = class extends Generator {
         type: toLower(attr.split(':')[1]) || 'string', // 数据类型: string, integer, datetime, daterange etc.
         label: attr.split(':')[2] || camelCase(attr.split(':')[0])
       }))
+      // 操作类型选项
+      this.options.actionTypes = (this.options.actionTypes || answers.actionTypes)
+      this.actionTypes = {
+        includeCreate: this.options.actionTypes.includes('includeCreate'),
+        includeRetrieve: this.options.actionTypes.includes('includeRetrieve'),
+        includeUpdate: this.options.actionTypes.includes('includeUpdate'),
+        includeDelete: this.options.actionTypes.includes('includeDelete')
+      }
+      console.log('actionTypes = ', this.actionTypes)
 
       done()
     })
@@ -125,6 +161,7 @@ module.exports = class extends Generator {
     this.config.set('needTest', this.options.needTest)
     this.config.set('formFields', this.options.formFields)
     this.config.set('attrs', this.options.attrs)
+    this.config.set('actionTypes', this.options.actionTypes)
   }
 
   /**
@@ -141,7 +178,8 @@ module.exports = class extends Generator {
       modelUpperFirstName: upperFirst(camelCase(this.options.modelName)),
       moduleTitle: this.options.moduleTitle,
       formFields: this.formFields,
-      attrs: this.attrs
+      attrs: this.attrs,
+      actionTypes: this.actionTypes
     }
 
     this._writeComponentFiles()
