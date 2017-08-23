@@ -2,7 +2,8 @@ module.exports = {
   'extends': 'standard',
   'plugins': [
     'standard',
-    'promise'
+    'promise',
+    'ejs'
   ],
   'env': {
     'node': true,

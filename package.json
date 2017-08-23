@@ -7,7 +7,8 @@
   ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava test/ejs.spec.js | tnyan",
+    "watch-test": "ava --watch test/ejs.spec.js | tnyan"
   },
   "repository": {
     "type": "git",
@@ -31,8 +32,14 @@
     "yosay": "^2.0.1"
   },
   "devDependencies": {
+    "@ava/babel-preset-stage-4": "^1.1.0",
+    "ava": "^0.22.0",
+    "chai": "^4.1.1",
+    "ejs": "^2.5.7",
+    "ejs-lint": "^0.3.0",
     "eslint": "4.4.0",
     "eslint-config-standard": "10.2.1",
+    "eslint-plugin-ejs": "^0.0.2",
     "eslint-plugin-import": "2.7.0",
     "eslint-plugin-node": "5.1.1",
     "eslint-plugin-promise": "3.5.0",

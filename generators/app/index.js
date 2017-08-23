@@ -50,7 +50,7 @@ module.exports = class extends Generator {
    */
   prompting () {
     if (!this.options['skip-welcome-message']) {
-      this.log(yosay('欢迎使用 Tom 的懒人傻瓜式代码生成器. PHP 是最好的语言!'))
+      this.log(yosay('恶心自己, 成全别人.'))
     }
 
     const done = this.async()
@@ -192,7 +192,7 @@ module.exports = class extends Generator {
 // Copy js file
     //
     this.fs.copyTpl(
-      this.templatePath('ko-component/ko-page.js'),
+      this.templatePath('ko-component/ko-script.js'),
       this.destinationPath(`app/scripts/ko-pages/${kebabCase(this.options.moduleName)}.js`),
       this.tplOptions
     )
@@ -200,14 +200,14 @@ module.exports = class extends Generator {
     // Copy scss file
     //
     this.fs.copyTpl(
-      this.templatePath('ko-component/ko-page.scss'),
+      this.templatePath('ko-component/ko-style.scss'),
       this.destinationPath(`app/scss/${this.options.moduleName}.scss`),
       this.tplOptions
     )
 
     // Copy html file
     this.fs.copyTpl(
-      this.templatePath('ko-component/ko-page.html'),
+      this.templatePath('ko-component/ko-layout.ejs'),
       this.destinationPath(`app/scripts/ko-pages/${this.options.moduleName}.html`),
       this.tplOptions
     )
