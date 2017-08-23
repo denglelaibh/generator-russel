@@ -1,4 +1,4 @@
-<bread-crumb params='content: "<%=moduleTitle%>"'></bread-crumb>
+<bread-crumb params='content: "<%= moduleTitle %>"'></bread-crumb>
 <div class="<%= moduleName %> container-fluid">
 	<div class="wrapper">
 		<div class="row">
@@ -7,19 +7,30 @@
 					<div class="panel-body">
 						<form class="form-horizontal">
 							<div class="form-group">
-								<% for(let i = 0; i < formFields.length; i++) {%>
-								<label class="control-label col-lg-3 col-md-3" for="search-<%= formFields[i].kebabAttrName %>"><%= formFields[i].label%>: </label>
+								<% for(let i = 0; i < formFields.length; i++) { %>
+								<label class="control-label col-lg-3 col-md-3"
+											 for="search-<%= formFields[i].kebabAttrName %>"><%= formFields[i].label %>: </label>
 								<div class="col-lg-4 col-md-4">
-									<input data-bind="textInput: <%= formFields[i].chosenAttrName %>" type="text" class="form-control input-sm mx-2" id="search-<%= formFields[i].kebabAttrName %>">
+									<% if (['daterange', 'datetimerange'].includes(formFields[i].type)) { %>
+									<input data-bind="value: <%= formFields[i].chosenAttrName%>Range" type="text"
+												 class="form-control input-sm mx-2" id="daterangepicker-<%= formFields[i].kebabAttrName %>">
+									<% } else { %>
+									<input data-bind="textInput: <%= formFields[i].chosenAttrName %>" type="text"
+												 class="form-control input-sm mx-2" id="search-<%= formFields[i].kebabAttrName %>">
+									<% } %>
 								</div>
 								<% } %>
 							</div>
 							<div class="form-group">
 								<div class="col-lg-offset-3 col-md-offset-3 col-lg-41 col-md-41">
-									<button type="button" role="button" class="bs-btn bs-btn-primary-sw bs-btn-swsize" data-bind="click: handleSearchClick">查询</button>
-                  <% if (actionTypes.includeCreate) {%>
-									<button type="button" role="button" class="bs-btn bs-btn-default-sw bs-btn-swsize ml-3" data-bind="click: show<%= modelUpperFirstName%>Dialog">添加</button>
-                  <%}%>
+									<button type="button" role="button" class="bs-btn bs-btn-primary-sw bs-btn-swsize"
+													data-bind="click: handleSearchClick">查询
+									</button>
+									<% if (actionTypes.includeCreate) { %>
+									<button type="button" role="button" class="bs-btn bs-btn-default-sw bs-btn-swsize ml-3"
+													data-bind="click: show<%= modelUpperFirstName %>Dialog">添加
+									</button>
+									<% } %>
 								</div>
 							</div>
 						</form>
@@ -33,20 +44,22 @@
 					<table class="bs-table bs-table-hover col-md-44">
 						<thead>
 						<tr>
-							<% for (let i = 0; i < attrs.length; i++) {%>
+							<% for (let i = 0; i < attrs.length; i++) { %>
 							<th><%= attrs[i].label %></th>
-							<% }%>
+							<% } %>
 							<th>操作栏</th>
 						</tr>
 						</thead>
 						<tbody data-bind="foreach: <%= modelPluralCamelName %>">
 						<tr>
-							<% for (let i = 0; i < attrs.length; i++) {%>
+							<% for (let i = 0; i < attrs.length; i++) { %>
 							<td data-bind="text: <%= attrs[i].name %>"></td>
-							<% }%>
+							<% } %>
 							<td>
 								<div>
-									<button data-bind="click: function (data, event) { $parent.handleDelete<%= modelUpperFirstName %>(data, event); }" type="button" role="button" class="bs-btn bs-btn-link">删除</button>
+									<button data-bind="click: function (data, event) { $parent.handleDelete<%= modelUpperFirstName %>(data, event); }"
+													type="button" role="button" class="bs-btn bs-btn-link">删除
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -58,34 +71,40 @@
 		</div>
 	</div>
 </div>
-<% if (actionTypes.includeCreate) {%>
+<% if (actionTypes.includeCreate) { %>
 <!--新建<%= modelUpperFirstName %>对话框-->
-<div id="<%= modelKebabName %>Dialog" class="modal fade <%= modelKebabName %>-fluid" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>ModalLabel" aria-hidden="true" data-bind="with: <%= modelCurrentName %>">
+<div id="<%= modelKebabName %>Dialog" class="modal fade <%= modelKebabName %>-fluid" tabindex="-1" role="dialog"
+		 aria-labelledby="<%= modelKebabName %>ModalLabel" aria-hidden="true" data-bind="with: <%= modelCurrentName %>">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="<%= modelKebabName %>ModalLabel">新增<%= modelUpperFirstName %></h3>
 	</div>
 	<div class="modal-body">
 		<form class="form-horizontal">
-			<% for (let i= 0; i < attrs.length; i++) {%>
+			<% for (let i = 0; i < attrs.length; i++) { %>
 			<div class="form-group">
 				<label class="control-label col-md-4" for="dialog-<%= attrs[i].kebabAttrName %>"><%= attrs[i].label %>：</label>
 				<div class="col-md-20">
-					<input data-bind="textInput: <%= attrs[i].name %>" class="form-control input-sm" type="text" id="dialog-<%= attrs[i].kebabAttrName %>"/>
+					<input data-bind="textInput: <%= attrs[i].name %>" class="form-control input-sm" type="text"
+								 id="dialog-<%= attrs[i].kebabAttrName %>"/>
 				</div>
 			</div>
-			<% }%>
+			<% } %>
 			<div class="form-group">
 				<div class="col-md-offset-2 col-md-20">
-					<button type="button" role="button" class="bs-btn bs-btn-primary pull-right" data-bind="css: { disabled: inValid }, attr: { disabled: inValid }" data-id="save" data-dismiss="modal">确认</button>
+					<button type="button" role="button" class="bs-btn bs-btn-primary pull-right"
+									data-bind="css: { disabled: inValid }, attr: { disabled: inValid }" data-id="save"
+									data-dismiss="modal">确认
+					</button>
 				</div>
 			</div>
 		</form>
 	</div>
 </div>
-<%}%>
+<% } %>
 <!--成功和失败 Alert-->
-<div id="<%= modelKebabName %>MessageDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>MessageDialogLabel" aria-hidden="true">
+<div id="<%= modelKebabName %>MessageDialog" class="modal fade" tabindex="-1" role="dialog"
+		 aria-labelledby="<%= modelKebabName %>MessageDialogLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="<%= modelKebabName %>MessageDialogLabel2"><%= moduleTitle %></h3>
@@ -98,7 +117,8 @@
 	</div>
 </div>
 <!--确认/取消对话框-->
-<div id="<%= modelKebabName %>ConfirmDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="<%= modelKebabName %>ConfirmDialogLabel" aria-hidden="true">
+<div id="<%= modelKebabName %>ConfirmDialog" class="modal fade" tabindex="-1" role="dialog"
+		 aria-labelledby="<%= modelKebabName %>ConfirmDialogLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="<%= modelKebabName %>ConfirmDialogLabel"><%= moduleTitle %></h3>
