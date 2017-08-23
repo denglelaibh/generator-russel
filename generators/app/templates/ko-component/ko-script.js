@@ -6,6 +6,7 @@ define(['knockout',
   'scripts/utils/router',
   'scripts/libs/bootstrap-modal',
   'scripts/ko-viewmodel/ko-pagination',
+  <% if (formFields.map(item => item.type).includes('daterange') || formFields.map(item => item.type).includes('datetimerange')) { %>'daterangepicker',<% } %>
   'text!./<%= moduleName %>.html',
   'css!<%= moduleName %>'], function (ko,
                                        validation,
@@ -15,6 +16,7 @@ define(['knockout',
                                        Router,
                                        modal,
                                        PaginationViewModel,
+<% if (formFields.map(item => item.type).includes('daterange') || formFields.map(item => item.type).includes('datetimerange')) { %>daterangepicker,<% } %>
                                        templateString,
                                        css) {
   validation.locale('zh-CN');
@@ -181,9 +183,15 @@ define(['knockout',
         pageSize: this.pageSize()
       };
       <% for (let i = 0; i < formFields.length; i++) { %>
-        if (this.<%= formFields[i].chosenAttrName %>()) {
-          query.<%= formFields[i].name %> = this.<%= formFields[i].chosenAttrName %>();
-        }
+        <% if (['daterange', 'datetimerange'].includes(formFields[i].type)) { %>
+          if (this.<%= formFields[i].chosenAttrName %>Range()) {
+            query.<%= formFields[i].name %> = this.<%= formFields[i].chosenAttrName %>Range();
+          }
+        <% } else { %>
+          if (this.<%= formFields[i].chosenAttrName %>()) {
+            query.<%= formFields[i].name %> = this.<%= formFields[i].chosenAttrName %>();
+          }
+        <% }%>
       <% } %>
 
       return query;
