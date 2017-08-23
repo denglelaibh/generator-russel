@@ -97,8 +97,9 @@ define(['knockout',
         this.<%= formFields[i].chosenAttrName%>Begin = ko.observable(''); // 查询条件: 开始时间
         this.<%= formFields[i].chosenAttrName%>End = ko.observable(''); // 查询条件: 开始时间
         this.<%= formFields[i].chosenAttrName%>Range = ko.observable(''); // 查询条件: 时间范围/日期区间
-      <%} else {%>
+      <% } else { %>
         this.<%= formFields[i].chosenAttrName %> = ko.observable(); // 查询条件: 选中的<%= formFields[i].name %>
+      <% } %>
     <% } %>
     // availableXXX
     //
