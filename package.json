@@ -25,10 +25,10 @@
   "homepage": "https://github.com/princetoad/generator-russel#readme",
   "dependencies": {
     "command-exists": "^1.2.2",
-    "lodash": "4.17.4",
-    "mkdirp": "0.5.1",
-    "pluralize": "6.0.0",
-    "yeoman-generator": "1.1.1",
+    "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "pluralize": "^7.0.0",
+    "yeoman-generator": "^1.1.1",
     "yosay": "^2.0.1"
   },
   "devDependencies": {
@@ -37,12 +37,12 @@
     "chai": "^4.1.1",
     "ejs": "^2.5.7",
     "ejs-lint": "^0.3.0",
-    "eslint": "4.4.0",
-    "eslint-config-standard": "10.2.1",
+    "eslint": "^4.5.0",
+    "eslint-config-standard": "^10.2.1",
     "eslint-plugin-ejs": "^0.0.2",
-    "eslint-plugin-import": "2.7.0",
-    "eslint-plugin-node": "5.1.1",
-    "eslint-plugin-promise": "3.5.0",
-    "eslint-plugin-standard": "3.0.1"
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
