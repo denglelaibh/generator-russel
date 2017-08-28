@@ -6,6 +6,7 @@ define(['knockout',
   'scripts/utils/router',
   'scripts/libs/bootstrap-modal',
   'scripts/ko-viewmodel/ko-pagination',
+  <% if (formFields.map(item => item.type).includes('daterange') || formFields.map(item => item.type).includes('datetimerange')) { %>'daterangepicker',<% } %>
   'text!./<%= moduleName %>.html',
   'css!<%= moduleName %>'], function (ko,
                                        validation,
@@ -15,6 +16,7 @@ define(['knockout',
                                        Router,
                                        modal,
                                        PaginationViewModel,
+<% if (formFields.map(item => item.type).includes('daterange') || formFields.map(item => item.type).includes('datetimerange')) { %>daterangepicker,<% } %>
                                        templateString,
                                        css) {
   validation.locale('zh-CN');
@@ -30,10 +32,10 @@ define(['knockout',
   var <%= modelUpperFirstName %> = function (_param) {
     var param = _param || {};
     var self = this;
-    <% for(var i=0; i<attrs.length; i++) { %>
+    <% for(var i = 0; i < attrs.length; i++) { %>
       self.<%= attrs[i].name %> = ko.observable(param.<%= attrs[i].name %>
-        <% if (attrs[i].type === 'string') { %>|| '');<% }%>
-        <% if (attrs[i].type === 'integer') { %>|| 0); <% }%>;
+        <% if (attrs[i].type.toLowerCase() === 'string')  { %> || ''); <% }%>
+        <% if (attrs[i].type.toLowerCase() === 'integer') { %> || 0); <% }%>
     <% } %>
     // 有 ID 字段才传
     if (param.id || param.id === 0) {
@@ -66,7 +68,7 @@ define(['knockout',
     this.toJSON = function () {
       var data = {
         <% for(var i=0; i<attrs.length; i++) { %>
-          <%= attrs[i].name %>: self.<%= attrs[i].name %>() <% if (i !== attrs.length -1) { %>,<% } %>
+          <%= attrs[i].name %>: self.<%= attrs[i].name %>()<% if (i !== attrs.length -1) { %>,<% } %>
         <% }%>
       };
       if (self.id || self.id === 0) {
@@ -84,26 +86,35 @@ define(['knockout',
     // 列表数据
     //
     this.<%= modelPluralCamelName %> = ko.observableArray([]); // <%= modelUpperFirstName %>列表
-    // this.constraints = ko.observableArray([]); // <%= modelUpperFirstName %>列表
-    // 对话框数据
+    // 新增/编辑对话框数据
     //
+    <% if (actionTypes.includeCreate || actionTypes.includeRetrieve || actionTypes.includeUpdate) { %>
     this.<%= modelCurrentName %> = ko.observable(); // 当前新增的<%= modelUpperFirstName %>对象
+    <% }%>
 
-    // chosenXXX
+    // 表单字段 - chosenXXX
     //
-    <% for (let i = 0; i < attrs.length; i++) { %>
-    this.<%= attrs[i].chosenAttrName %> = ko.observable(); // 查询条件: 选中的<%= attrs[i].name %>
+    <% for (let i = 0; i < formFields.length; i++) { %>
+      <% if (['daterange', 'datetimerange'].includes(formFields[i].type)) {%>
+        this.<%= formFields[i].chosenAttrName%>Begin = ko.observable(''); // 查询条件: 开始时间
+        this.<%= formFields[i].chosenAttrName%>End = ko.observable(''); // 查询条件: 开始时间
+        this.<%= formFields[i].chosenAttrName%>Range = ko.observable(''); // 查询条件: 时间范围/日期区间
+      <% } else { %>
+        this.<%= formFields[i].chosenAttrName %> = ko.observable(); // 查询条件: 选中的<%= formFields[i].name %>
+      <% } %>
     <% } %>
     // availableXXX
     //
-    <% for (let i = 0; i < attrs.length; i++) { %>
-    this.<%= attrs[i].availableAttrName %> = [{
-      id: 0,
-      description: 'foo'
-    }, {
-      id: 1,
-      description: 'bar'
-    }]; // 可选的 <%= attrs[i].name %>
+    <% for (let i = 0; i < formFields.length; i++) { %>
+      <% if (['select'].includes(formFields[i].type)) {%>
+        this.<%= formFields[i].availableAttrName %> = [{
+          id: 0,
+          description: 'foo'
+        }, {
+          id: 1,
+          description: 'bar'
+        }]; // 可选的 <%= formFields[i].name %>
+      <%}%>
     <% } %>
 
     //  TODO: 询问是否需要分页
@@ -135,7 +146,27 @@ define(['knockout',
     init: function (params) {
       var self = this;
       document.title = '<%= moduleTitle %>'; // 设置页面标题
-      // document.title = '客户黑白名单'; // 设置页面标题
+      <% for (var i = 0; i < formFields.length; i++) {%>
+        <% if (['daterange', 'datetimerange'].includes(formFields[i].type)) {%>
+          // initDateRange: function (defaultTime, defaultEndTime) {
+          if (conf === undefined) {
+            var conf = {
+              language: 'cn',
+              separator: ' 到 ',
+              format: 'YYYY-MM-DD HH:mm:ss',
+              autoClose: true,
+              time: {
+                enabled: true
+              }
+            };
+          }
+          $('#daterangepicker-<%=formFields[i].kebabAttrName%>').dateRangePicker(conf)
+            .bind('datepicker-change', function (event, obj) {
+              self.<%= formFields[i].chosenAttrName%>Begin(moment(obj.date1).format('YYYY-MM-DD HH:mm:ss'));
+              self.<%= formFields[i].chosenAttrName%>End(moment(obj.date2).format('YYYY-MM-DD HH:mm:ss'));
+            });
+        <%}%>
+      <%}%>
     },
 
     //
@@ -151,10 +182,16 @@ define(['knockout',
         pageNum: this.pageNum(),
         pageSize: this.pageSize()
       };
-      <% for (let i = 0; i < attrs.length; i++) { %>
-        if (this.<%= attrs[i].chosenAttrName %>()) {
-          query.<%= attrs[i].name %> = this.<%= attrs[i].chosenAttrName %>();
-        }
+      <% for (let i = 0; i < formFields.length; i++) { %>
+        <% if (['daterange', 'datetimerange'].includes(formFields[i].type)) { %>
+          if (this.<%= formFields[i].chosenAttrName %>Range()) {
+            query.<%= formFields[i].name %> = this.<%= formFields[i].chosenAttrName %>Range();
+          }
+        <% } else { %>
+          if (this.<%= formFields[i].chosenAttrName %>()) {
+            query.<%= formFields[i].name %> = this.<%= formFields[i].chosenAttrName %>();
+          }
+        <% }%>
       <% } %>
 
       return query;
@@ -221,6 +258,7 @@ define(['knockout',
     },
     <% }%>
 
+  <% if (actionTypes.includeCreate) { %>
     /**
      * 显示添加 <%= modelName %>对话框
      */
@@ -271,7 +309,9 @@ define(['knockout',
         }
       });
     },
+  <% } %>
 
+  <% if (actionTypes.includeDelete) { %>
     /**
      * 删除 <%= modelName %>, 成功后更新列表
      * @param data
@@ -324,6 +364,7 @@ define(['knockout',
         backdrop: true
       });
     },
+  <% } %>
 
     /**
      * Ajax 请求成功/失败的消息提示
