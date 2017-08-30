@@ -254,12 +254,14 @@ module.exports = class extends Generator {
       //   yarn: hasYarn
       // })
     }
+    if (!this.options['skip-css-compile']) {
+      this.spawnCommand('npm', ['run', 'css-compile'])
+    }
   }
 
   /**
    * 最后调用, 清理工作
    */
   end () {
-
   }
 }
