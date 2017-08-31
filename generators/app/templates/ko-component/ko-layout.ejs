@@ -102,6 +102,27 @@
 	</div>
 </div>
 <% } %>
+<% if (actionTypes.includeRetrieve) { %>
+<!--查看<%= modelUpperFirstName %>对话框-->
+<div id="view-<%= modelKebabName %>-dialog" data-bind="with: <%= modelCurrentName %>" class="modal large fade" tabindex="-1" role="dialog" aria-labelledby="view-<%= modelCurrentName %>-dialog-label1"
+		 aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="view-<%= modelKebabName %>-dialog-label">查看<%= modelUpperFirstName %></h3>
+	</div>
+	<div class="modal-body container-fluid">
+		<% for (let i = 0; i < attrs.length; i++) { %>
+		<div class="row py-2">
+			<div class="col-md-4 col-lg-4 text-right" for="dialog-<%= attrs[i].kebabAttrName %>"><%= attrs[i].label %>：</div>
+			<div class="col-lg-8 col-md-8" data-bind="text: <%= attrs[i].name %>"></div>
+		</div>
+		<% } %>
+	</div>
+	<div class="modal-footer">
+		<button class="bs-btn bs-btn-primary" data-id="ok" data-dismiss="modal" aria-hidden="true">确定</button>
+	</div>
+</div>
+<% } %>>
 <!--成功和失败 Alert-->
 <div id="<%= modelKebabName %>MessageDialog" class="modal fade" tabindex="-1" role="dialog"
 		 aria-labelledby="<%= modelKebabName %>MessageDialogLabel" aria-hidden="true">
