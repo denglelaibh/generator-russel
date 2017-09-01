@@ -10,6 +10,6 @@
     }
   },
   "required": [
-    "institutionId"
+    "id"
   ]
 }

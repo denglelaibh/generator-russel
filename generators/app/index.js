@@ -243,7 +243,7 @@ module.exports = class extends Generator {
       this.tplOptions
     )
     this.fs.copyTpl(
-      this.templatePath('test/specs/udpate-request.json'),
+      this.templatePath('test/specs/update-request.json'),
       this.destinationPath(`test/${this.options.moduleName}/update-request.json`),
       this.tplOptions
     )

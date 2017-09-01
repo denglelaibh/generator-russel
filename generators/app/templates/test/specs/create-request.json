@@ -5,15 +5,15 @@
   "type": "object",
   "properties": {
     <% for (let i = 0; i < attrs.length; i++) { %>
-      "attrs[i].name": {
-        "type": "attrs[i].type",
-        "description": "attrs[i].label"
+      "<%=attrs[i].name%>": {
+        "type": "<%=attrs[i].type%>",
+        "description": "<%=attrs[i].label%>"
       },
     <% } %>
   },
   "required": [
     <% for (let i = 0; i < attrs.length; i++) { %>
-    "attrs[i].name",
+    "<%=attrs[i].name%>",
     <% } %>
   ]
 }
