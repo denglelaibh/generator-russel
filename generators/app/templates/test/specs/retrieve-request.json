@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/query<%=modelUpperFirstName%> - Request Payload",
+  "description": "查询<%=modelUpperFirstName%>详细信息 - 请求数据",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "<%=modelUpperFirstName%>编号",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

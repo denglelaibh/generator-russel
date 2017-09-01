@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/query<%=modelPluralUpperFirstName%> - Response",
+  "description": "查询<%=modelUpperFirstName%>列表 - 应答",
+  "type": "objet",
+  "properties": {
+    "resultCode": {
+      "description": "00000,成功;00001,失败",
+      "type": "string",
+      "enum": [
+        "00000",
+        "00001"
+      ]
+    },
+    "resultMsg": {
+      "description": "成功;失败",
+      "type": "string"
+   },
+    "resultData": {
+      "type": "array",
+      "description": "<%=modelUpperFirstName%>列表",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "<%=modelUpperFirstName%>编号"
+          },
+          <% for (let i = 0; i < attrs.length; i++) { %>
+            "<%=attrs[i].name%>": {
+              "type": "<%=attrs[i].type%>",
+              "description": "<%=attrs[i].label%>"
+            },
+          <% } %>
+        },
+        "required": [
+          "id",
+          <% for (let i = 0; i < attrs.length; i++) { %>
+            "<%=attrs[i].name%>",
+          <% } %>
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "resultCode",
+    "resultMsg",
+    "resultData"
+  ]
+}
