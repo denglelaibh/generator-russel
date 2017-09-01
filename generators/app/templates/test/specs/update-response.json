@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/modify<%=modelUpperFirstName%> - Response",
+  "description": "修改<%=modelUpperFirstName%>信息 - 应答",
+  "type": "object",
+  "properties": {
+    "resultCode": {
+      "description": "00000,成功;00001,失败",
+      "type": "string",
+      "enum": [
+        "00000",
+        "00001"
+      ]
+    },
+    "resultMsg": {
+      "description": "成功;失败",
+      "type": "string"
+    },
+    "resultData": {
+      "description": "null",
+      "type": "null"
+    }
+  },
+  "required": [
+    "resultCode",
+    "resultMsg",
+    "resultData"
+  ]
+}

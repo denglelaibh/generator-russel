@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/modify<%=modelUpperFirstName%> - Request Payload",
+  "description": "修改<%=modelUpperFirstName%>信息 - 请求数据",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "<%=modelUpperFirstName%>编号"
+    },
+    <% for (let i = 0; i < attrs.length; i++) { %>
+      "attrs[i].name": {
+      "type": "attrs[i].type",
+      "description": "attrs[i].label"
+      },
+    <% } %>
+  },
+  "required": [
+    <% for (let i = 0; i < attrs.length; i++) { %>
+    "attrs[i].name",
+    <% } %>
+  ]
+}
