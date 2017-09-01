@@ -188,6 +188,10 @@ module.exports = class extends Generator {
     }
   }
 
+  /**
+   * 生成组件相关文件
+   * @private
+   */
   _writeComponentFiles () {
 // Copy js file
     //
@@ -217,16 +221,66 @@ module.exports = class extends Generator {
    * 写入自动化测试脚本文件
    */
   _writeTestSpecFiles () {
-    // jsonschema - list
+    // JSON Schema
     this.fs.copyTpl(
-      this.templatePath('specs/list.json'),
-      this.destinationPath(`test/${this.options.moduleName}/list.json`),
+      this.templatePath('test/specs/create-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/create-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/create-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/create-response.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/retrieve-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/retrieve-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/retrieve-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/retrieve-response.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/udpate-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/update-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/update-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/update-response.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/delete-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/delete-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/delete-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/delete-response.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/list-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/list-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
       this.tplOptions
     )
     // 测试脚本
     this.fs.copyTpl(
-      this.templatePath('specs/api.spec.js'),
+      this.templatePath('test/specs/api.spec.js'),
       this.destinationPath(`test/${this.options.moduleName}/api.spec.js`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/service.js'),
+      this.destinationPath(`test/${this.options.moduleName}/service.js`),
       this.tplOptions
     )
   }
