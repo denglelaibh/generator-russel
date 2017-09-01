@@ -1,31 +1,31 @@
-const {expect} = require('chai') // BDD 断言库
-const chai = require('chai')
-chai.use(require('chai-json-schema')) // json schema 的 chai.js 插件
+const {expect} = require('chai'); // BDD 断言库
+const chai = require('chai');
+chai.use(require('chai-json-schema')); // json schema 的 chai.js 插件
 
 // 测试辅助库和方法
 //
-const {cloneDeep} = require('lodash') // 深度克隆测试请求数据
-const moment = require('moment') // 日期时间操作辅助库
-const faker = require('faker/locale/zh_CN') // fake 数据
+const {cloneDeep} = require('lodash'); // 深度克隆测试请求数据
+const moment = require('moment'); // 日期时间操作辅助库
+const faker = require('faker/locale/zh_CN'); // fake 数据
 
-const request = require('../helpers/request') // 使用 axios 发起 RESTful 请求
-const {expectOK, expectStatusAndMessage, expectStatusOK, expectStatusNotOK} = require('../helpers/expect-http') // 封装的 http 层面的断言方法
-const {distillInfo, randomColor} = require('../helpers/distill') // 通用信息控制台打印方法
-const {accountNo, userName, password, newPassword, setting} = require('../helpers/global-config') // 在全局配置里面配置的测试数据
-const {login} = require('../helpers/login') // 登录接口
-const {dateTimeLong, dateTimeShort} = require('../helpers/datetime') // 日期时间格式配置
+const request = require('../helpers/request'); // 使用 axios 发起 RESTful 请求
+const {expectOK, expectStatusAndMessage, expectStatusOK, expectStatusNotOK} = require('../helpers/expect-http'); // 封装的 http 层面的断言方法
+const {distillInfo, randomColor} = require('../helpers/distill'); // 通用信息控制台打印方法
+const {accountNo, userName, password, newPassword, setting} = require('../helpers/global-config'); // 在全局配置里面配置的测试数据
+const {login} = require('../helpers/login'); // 登录接口
+const {dateTimeLong, dateTimeShort} = require('../helpers/datetime'); // 日期时间格式配置
 
 // institution JSON Schema
-const CreateRequestSchema = require('./create-request.json')
-const CreateResponseSchema = require('./create-response.json')
-const RetrieveRequestSchema = require('./retrieve-request.json')
-const RetrieveResponseSchema = require('./retrieve-response.json')
-const UpdateRequestSchema = require('./update-request.json')
-const UpdateResponseSchema = require('./update-response.json')
-const DeleteRequestSchema = require('./delete-request.json')
-const DeleteResponseSchema = require('./delete-response.json')
-const ListRequestSchema = require('./list-request.json')
-const ListResponseSchema = require('./list-response.json')
+const CreateRequestSchema = require('./create-request.json');
+const CreateResponseSchema = require('./create-response.json');
+const RetrieveRequestSchema = require('./retrieve-request.json');
+const RetrieveResponseSchema = require('./retrieve-response.json');
+const UpdateRequestSchema = require('./update-request.json');
+const UpdateResponseSchema = require('./update-response.json');
+const DeleteRequestSchema = require('./delete-request.json');
+const DeleteResponseSchema = require('./delete-response.json');
+const ListRequestSchema = require('./list-request.json');
+const ListResponseSchema = require('./list-response.json');
 
 //
 // <%=modelUpperFirstName%>
@@ -36,15 +36,15 @@ const ListResponseSchema = require('./list-response.json')
 const get<%=modelPluralUpperFirstName%> = async () => {
   try {
     // 没有请求数据, 就不需要校验. 如果支持分页的话, 起码需要校验分页字段, 如果还有查询条件的话, 同时写到 request 的 schema 里面
-    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>')
-    distillInfo(response)
-    expect(response.data).to.be.jsonSchema(ListResponseSchema)
-    expectStatusOK(response)
+    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>');
+    distillInfo(response);
+    expect(response.data).to.be.jsonSchema(ListResponseSchema);
+    expectStatusOK(response);
 
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } catch (err) {
-    console.error(err)
-    return Promise.reject(err)
+    console.error(err);
+    return Promise.reject(err);
   }
 }
 
@@ -53,17 +53,17 @@ const get<%=modelPluralUpperFirstName%> = async () => {
  */
 const get<%=modelUpperFirstName%> = async (id) => {
   try {
-    const data = {id}
-    expect(data).to.be.jsonSchema(RetrieveRequestSchema)
-    const response = await request.post('/<%=moduleName%>/query<%=modelUpperFirstName%>', data)
-    distillInfo(response)
-    expect(response.data).to.be.jsonSchema(RetrieveResponseSchema)
-    expectStatusOK(response)
+    const data = {id};
+    expect(data).to.be.jsonSchema(RetrieveRequestSchema);
+    const response = await request.post('/<%=moduleName%>/query<%=modelUpperFirstName%>', data);
+    distillInfo(response);
+    expect(response.data).to.be.jsonSchema(RetrieveResponseSchema);
+    expectStatusOK(response);
 
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } catch (err) {
-    console.error(err)
-    return Promise.reject(err)
+    console.error(err);
+    return Promise.reject(err);
   }
 }
 
@@ -83,9 +83,9 @@ const make<%=modelUpperFirstName%> = ({id, parentId, insCode, insName}) => {
     address: `${faker.address.state()}${faker.address.city()}${faker.address.streetAddress()}`
   }
   if (id || id === 0) {
-    data.id = id
+    data.id = id;
   }
-  return data
+  return data;
 }
 
 /**
@@ -96,16 +96,16 @@ const make<%=modelUpperFirstName%> = ({id, parentId, insCode, insName}) => {
  */
 const post<%=modelUpperFirstName%> = async (entity) => {
   try {
-    expect(entity).to.be.jsonSchema(CreateRequestSchema)
-    const response = await request.post('/<%=moduleName%>/save<%=modelUpperFirstName%>', entity)
-    distillInfo(response)
-    expect(response.data).to.be.jsonSchema(CreateResponseSchema)
-    expectStatusOK(response)
+    expect(entity).to.be.jsonSchema(CreateRequestSchema);
+    const response = await request.post('/<%=moduleName%>/save<%=modelUpperFirstName%>', entity);
+    distillInfo(response);
+    expect(response.data).to.be.jsonSchema(CreateResponseSchema);
+    expectStatusOK(response);
 
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } catch (err) {
-    console.log(err)
-    return Promise.reject(err)
+    console.log(err);
+    return Promise.reject(err);
   }
 }
 
@@ -116,16 +116,16 @@ const post<%=modelUpperFirstName%> = async (entity) => {
  */
 const put<%=modelUpperFirstName%> = async (entity) => {
   try {
-    expect(entity).to.be.jsonSchema(UpdateRequestSchema)
-    const response = await request.post('/<%=moduleName%>/modify<%=modelUpperFirstName%>', entity)
-    distillInfo(response)
-    expect(response.data).to.be.jsonSchema(UpdateResponseSchema)
-    expectStatusOK(response)
+    expect(entity).to.be.jsonSchema(UpdateRequestSchema);
+    const response = await request.post('/<%=moduleName%>/modify<%=modelUpperFirstName%>', entity);
+    distillInfo(response);
+    expect(response.data).to.be.jsonSchema(UpdateResponseSchema);
+    expectStatusOK(response);
 
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } catch (err) {
-    console.log(err)
-    return Promise.reject(err)
+    console.log(err);
+    return Promise.reject(err);
   }
 }
 
@@ -136,17 +136,17 @@ const put<%=modelUpperFirstName%> = async (entity) => {
  */
 const delete<%=modelUpperFirstName%> = async (id) => {
   try {
-    const data = {id}
-    expect(data).to.be.jsonSchema(DeleteRequestSchema)
-    const response = await request.post('/<%=moduleName%>/delete<%=modelUpperFirstName%>', data)
-    distillInfo(response)
-    expect(response.data).to.be.jsonSchema(DeleteResponseSchema)
-    expectStatusOK(response)
+    const data = {id};
+    expect(data).to.be.jsonSchema(DeleteRequestSchema);
+    const response = await request.post('/<%=moduleName%>/delete<%=modelUpperFirstName%>', data);
+    distillInfo(response);
+    expect(response.data).to.be.jsonSchema(DeleteResponseSchema);
+    expectStatusOK(response);
 
-    return Promise.resolve(response)
+    return Promise.resolve(response);
   } catch (err) {
-    console.log(err)
-    return Promise.reject(err)
+    console.log(err);
+    return Promise.reject(err);
   }
 }
 

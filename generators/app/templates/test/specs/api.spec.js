@@ -50,30 +50,30 @@ test.before('登录', async t => {
 //-------------------------------------<%=modelUpperFirstName%>-----------------------------------------------//
 test('查询全部<%=modelUpperFirstName%>信息', async t => {
   try {
-    const response = await get<%=modelPluralUpperFirstName%>()
-    const <%=modelPluralCamelName%> = response.data.resultData
-    expect(<%=modelPluralCamelName%>).to.be.not.empty
+    const response = await get<%=modelPluralUpperFirstName%>();
+    const <%=modelPluralCamelName%> = response.data.resultData;
+    expect(<%=modelPluralCamelName%>).to.be.not.empty;
 
-    t.pass()
+    t.pass();
   } catch (err) {
-    console.error(err)
-    t.fail(err)
+    console.error(err);
+    t.fail(err);
   }
 })
 
 test('查询<%=moduleName%>详细信息', async t => {
   try {
-    let response = await get<%=modelPluralUpperFirstName%>()
-    const <%=modelPluralCamelName%> = response.data.resultData
+    let response = await get<%=modelPluralUpperFirstName%>();
+    const <%=modelPluralCamelName%> = response.data.resultData;
     if (<%=modelPluralCamelName%> && <%=modelPluralCamelName%>.length) {
-      const entityId = faker.random.arrayElement(<%=modelPluralCamelName%>.map(item => item.id))
-      response = await get<%=modelUpperFirstName%>(entityId)
+      const entityId = faker.random.arrayElement(<%=modelPluralCamelName%>.map(item => item.id));
+      response = await get<%=modelUpperFirstName%>(entityId);
     }
 
-    t.pass()
+    t.pass();
   } catch (err) {
-    console.error(err)
-    t.fail(err)
+    console.error(err);
+    t.fail(err);
   }
 })
 
@@ -82,65 +82,65 @@ test('查询<%=moduleName%>详细信息', async t => {
  */
 test('添加<%=modelUpperFirstName%>信息', async t => {
   try {
-    const <%=modelName%> = make<%=modelUpperFirstName%>()
-    response = await post<%=modelUpperFirstName%>(<%=modelName%>)
-    const id = response.data.resultData
-    response = await get<%=modelUpperFirstName%>(id)
-    expect(response.data.resultData).to.deep.equal(<%=modelName%>)
+    const <%=modelName%> = make<%=modelUpperFirstName%>();
+    response = await post<%=modelUpperFirstName%>(<%=modelName%>);
+    const id = response.data.resultData;
+    response = await get<%=modelUpperFirstName%>(id);
+    expect(response.data.resultData).to.deep.equal(<%=modelName%>);
 
     // 插完记得删除
     if (setting.clearAuto) {
-      response = await delete<%=modelUpperFirstName%>(id)
+      response = await delete<%=modelUpperFirstName%>(id);
     }
 
-    t.pass()
+    t.pass();
   } catch (err) {
-    console.error(err)
-    t.fail(err)
+    console.error(err);
+    t.fail(err);
   }
 })
 
 test('修改<%=moduleName%>信息', async t => {
   try {
-    let response = await get<%=modelPluralUpperFirstName%>()
-    const <%=modelPluralCamelName%> = response.data.resultData
-    let iCount = 0
+    let response = await get<%=modelPluralUpperFirstName%>();
+    const <%=modelPluralCamelName%> = response.data.resultData;
+    let iCount = 0;
     while (iCount < <%=modelPluralCamelName%>.length) {
-      const <%=modelName%> = <%=modelPluralCamelName%>[iCount]
+      const <%=modelName%> = <%=modelPluralCamelName%>[iCount];
       const entity = make<%=modelUpperFirstName%>({
-      })
-      response = await put<%=modelUpperFirstName%>(entity)
-      response = await get<%=modelUpperFirstName%>(<%=modelName%>.id)
+      });
+      response = await put<%=modelUpperFirstName%>(entity);
+      response = await get<%=modelUpperFirstName%>(<%=modelName%>.id);
 
-      expect(response.data.resultData).to.deep.equal(entity)
+      expect(response.data.resultData).to.deep.equal(entity);
 
       iCount += 1
     }
 
-    t.pass()
+    t.pass();
   } catch (err) {
-    console.error(err)
-    t.fail(err)
+    console.error(err);
+    t.fail(err);
   }
 })
 
 test('删除<%=modelUpperFirstName%>信息', async t => {
   try {
-    let response = await get<%=modelPluralUpperFirstName%>()
-    const <%=modelPluralCamelName%> = response.data.resultData
+    let response = await get<%=modelPluralUpperFirstName%>();
+    const <%=modelPluralCamelName%> = response.data.resultData;
     if (<%=modelPluralCamelName%>.length === 0) {
-      return Promise.reject(new Error('没有<%=modelUpperFirstName%>!'))
+      return Promise.reject(new Error('没有<%=modelUpperFirstName%>!'));
     }
 
-    const <%=modelName%> = faker.random.arrayElement(<%=modelPluralCamelName%>)
-    await delete<%=modelUpperFirstName%>(<%=modelName%>)
-    response = await get<%=modelPluralUpperFirstName%>()
-    const <%=modelName%>Ids = response.data.resultData.map(item => item.id)
-    expect(<%=modelName%>.id).to.not.be.oneOf(<%=modelName%>Ids)
+    const <%=modelName%> = faker.random.arrayElement(<%=modelPluralCamelName%>);
+    await delete<%=modelUpperFirstName%>(<%=modelName%>);
+    response = await get<%=modelPluralUpperFirstName%>();
+    const <%=modelName%>Ids = response.data.resultData.map(item => item.id);
+    expect(<%=modelName%>.id).to.not.be.oneOf(<%=modelName%>Ids);
 
-    t.pass()
+    t.pass();
   } catch (err) {
-    console.error(err)
-    t.fail(err)
+    console.error(err);
+    t.fail(err);
   }
 })

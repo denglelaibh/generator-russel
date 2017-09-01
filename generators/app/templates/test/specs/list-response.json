@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "/<%=modelName%>/query<%=modelPluralUpperFirstName%> - Response",
   "description": "查询<%=modelUpperFirstName%>列表 - 应答",
-  "type": "object",
+  "type": "objet",
   "properties": {
     "resultCode": {
       "description": "00000,成功;00001,失败",
@@ -15,7 +15,7 @@
     "resultMsg": {
       "description": "成功;失败",
       "type": "string"
-    },
+   },
     "resultData": {
       "type": "array",
       "description": "<%=modelUpperFirstName%>列表",
@@ -28,8 +28,9 @@
           },
           <% for (let i = 0; i < attrs.length; i++) { %>
             "<%=attrs[i].name%>": {
-            "type": "<%=attrs[i].type%>",
-            "description": "<%=attrs[i].label%>"
+              "type": "<%=attrs[i].type%>",
+              "description": "<%=attrs[i].label%>"
+            },
           <% } %>
         },
         "required": [
