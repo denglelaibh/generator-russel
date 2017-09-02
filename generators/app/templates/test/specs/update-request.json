@@ -12,12 +12,12 @@
       "<%=attrs[i].name%>": {
       "type": "<%=attrs[i].type%>",
       "description": "<%=attrs[i].label%>"
-      }<% if (i !== attrs.length - 1) { %><%=,%><% } %>
+      }<% if (i !== attrs.length - 1) { %>,<% }%>
     <% } %>
   },
   "required": [
     <% for (let i = 0; i < attrs.length; i++) { %>
-    "<%=attrs[i].name%>"<% if (i !== attrs.length - 1) { %><%=,%><% } %>
+    "<%=attrs[i].name%>"<% if (i !== attrs.length - 1) { %>,<% }%>
     <% } %>
   ]
 }
