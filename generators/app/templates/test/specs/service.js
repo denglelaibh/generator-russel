@@ -46,7 +46,7 @@ const get<%=modelPluralUpperFirstName%> = async () => {
     console.error(err);
     return Promise.reject(err);
   }
-}
+};
 
 /**
  * 查询<%=modelUpperFirstName%>详情
@@ -65,7 +65,7 @@ const get<%=modelUpperFirstName%> = async (id) => {
     console.error(err);
     return Promise.reject(err);
   }
-}
+};
 
 /**
  * 构造<%=modelUpperFirstName%>实例
@@ -81,12 +81,12 @@ const make<%=modelUpperFirstName%> = ({id, parentId, insCode, insName}) => {
     zipCode: faker.address.zipCode(),
     fax: faker.phone.phoneNumber('010-########'),
     address: `${faker.address.state()}${faker.address.city()}${faker.address.streetAddress()}`
-  }
+  };
   if (id || id === 0) {
     data.id = id;
   }
   return data;
-}
+};
 
 /**
  * 保存<%=modelUpperFirstName%>实例
@@ -107,7 +107,7 @@ const post<%=modelUpperFirstName%> = async (entity) => {
     console.log(err);
     return Promise.reject(err);
   }
-}
+};
 
 /**
  * 更新<%=modelUpperFirstName%>实例
@@ -127,7 +127,7 @@ const put<%=modelUpperFirstName%> = async (entity) => {
     console.log(err);
     return Promise.reject(err);
   }
-}
+};
 
 /**
  * 删除<%=modelUpperFirstName%>实例
@@ -148,7 +148,7 @@ const delete<%=modelUpperFirstName%> = async (id) => {
     console.log(err);
     return Promise.reject(err);
   }
-}
+};
 
 module.exports = {
   get<%=modelPluralUpperFirstName%>,
@@ -157,4 +157,4 @@ module.exports = {
   post<%=modelUpperFirstName%>,
   put<%=modelUpperFirstName%>,
   delete<%=modelUpperFirstName%>
-}
+};
