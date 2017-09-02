@@ -57,7 +57,7 @@ module.exports = class extends Generator {
     const prompts = [{
       type: 'input',
       name: 'moduleName',
-      message: '模块名称:'
+      message: '功能模块名称:'
     }, {
       type: 'input',
       name: 'modelName',
@@ -69,11 +69,11 @@ module.exports = class extends Generator {
     }, {
       type: 'input',
       name: 'attrs',
-      message: '输入表格显示字段:'
+      message: '用于表格显示的字段[name:type:label]:'
     }, {
       type: 'input',
       name: 'formFields',
-      message: '输入表单查询字段:'
+      message: '用于表单查询字段[name:type:label]:'
     }, {
       type: 'checkbox',
       name: 'actionTypes',
@@ -95,6 +95,23 @@ module.exports = class extends Generator {
         value: 'includeDelete',
         checked: true
       }]
+    }, {
+      type: 'list',
+      name: 'queryResult',
+      message: '查询结果是单一结果还是列表?',
+      choices: [{
+        name: '单一结果',
+        value: 'single'
+      }, {
+        name: '多结果列表',
+        value: 'multiple'
+      }]
+    }, {
+      type: 'confirm',
+      name: 'needPagination',
+      message: '是否需要分页?',
+      default: true,
+      when: answers => answers.queryResult === 'multiple'
     }, {
       type: 'confirm',
       name: 'needService',
@@ -153,6 +170,10 @@ module.exports = class extends Generator {
         includeDelete: this.options.actionTypes.includes('includeDelete')
       }
       console.log('actionTypes = ', this.actionTypes)
+      // 单一结果还是多项列表
+      this.options.queryResult = (this.options.queryResult || answers.queryResult)
+      // 是否需要分页
+      this.options.needPagination = (this.options.needPagination || answers.needPagination)
 
       done()
     })
@@ -170,6 +191,8 @@ module.exports = class extends Generator {
     this.config.set('formFields', this.options.formFields)
     this.config.set('attrs', this.options.attrs)
     this.config.set('actionTypes', this.options.actionTypes)
+    this.config.set('queryResult', this.options.queryResult)
+    this.config.set('needPagination', this.options.needPagination)
   }
 
   /**
@@ -187,7 +210,9 @@ module.exports = class extends Generator {
       moduleTitle: this.options.moduleTitle,
       formFields: this.formFields,
       attrs: this.attrs,
-      actionTypes: this.actionTypes
+      actionTypes: this.actionTypes,
+      queryResult: this.options.queryResult,
+      needPagination: this.options.needPagination
     }
 
     if (this.options.needService) {

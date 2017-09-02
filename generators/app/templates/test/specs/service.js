@@ -36,6 +36,16 @@ const ListResponseSchema = require('./list-response.json');
 const get<%=modelPluralUpperFirstName%> = async () => {
   try {
     // 没有请求数据, 就不需要校验. 如果支持分页的话, 起码需要校验分页字段, 如果还有查询条件的话, 同时写到 request 的 schema 里面
+    <% if (needPagination) { %>
+    const data = {
+      pageSize: 10,
+      pageNum: 1
+    }
+    expect(data).to.be.jsonSchema(ListRequestSchema)
+    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>', data)
+    <% } else { %>
+    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>')
+    <% } %>
     const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>');
     distillInfo(response);
     expect(response.data).to.be.jsonSchema(ListResponseSchema);
