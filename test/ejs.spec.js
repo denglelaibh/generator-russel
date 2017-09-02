@@ -75,7 +75,9 @@ test('test/specs/create-request.json', t => {
         moduleTitle: '客户信息查询',
         formFields: 'certName:string:姓名 mobile:string:手机号 certNo:string:身份证号 accountNo:string:二类户账号'.trim().split(/\s/),
         attrs: 'custNo:string:客户号 accountNo:string:二类户账号 certName:string:姓名 mobile:string:手机号 certNo:string:证件号码 certType:string:证件类型'.trim().split(/\s/),
-        actionTypes: ['includeCreate', 'includeRetrieve', 'includeUpdate', 'includeDelete']
+        actionTypes: ['includeCreate', 'includeRetrieve', 'includeUpdate', 'includeDelete'],
+        needPagination: true,
+        queryResult: 'multiple'
       }
       const attrMapping = attr => ({
         name: camelCase(attr.split(':')[0]), // 属性使用 camelCase, constraintType
@@ -98,6 +100,8 @@ test('test/specs/create-request.json', t => {
         modelUpperFirstName: upperFirst(camelCase(options.modelName)),
         moduleTitle: options.moduleTitle,
         actionTypes: options.actionTypes,
+        needPagination: options.needPagination,
+        // queryResult: options.queryResult,
         formFields,
         attrs
       }

@@ -59,7 +59,7 @@ test('查询全部<%=modelUpperFirstName%>信息', async t => {
     console.error(err);
     t.fail(err);
   }
-})
+});
 
 test('查询<%=moduleName%>详细信息', async t => {
   try {
@@ -75,7 +75,7 @@ test('查询<%=moduleName%>详细信息', async t => {
     console.error(err);
     t.fail(err);
   }
-})
+});
 
 /**
  * 添加<%=modelUpperFirstName%>
@@ -98,7 +98,7 @@ test('添加<%=modelUpperFirstName%>信息', async t => {
     console.error(err);
     t.fail(err);
   }
-})
+});
 
 test('修改<%=moduleName%>信息', async t => {
   try {
@@ -122,7 +122,7 @@ test('修改<%=moduleName%>信息', async t => {
     console.error(err);
     t.fail(err);
   }
-})
+});
 
 test('删除<%=modelUpperFirstName%>信息', async t => {
   try {
@@ -143,4 +143,4 @@ test('删除<%=modelUpperFirstName%>信息', async t => {
     console.error(err);
     t.fail(err);
   }
-})
+});

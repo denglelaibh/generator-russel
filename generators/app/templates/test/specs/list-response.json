@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "/<%=modelName%>/query<%=modelPluralUpperFirstName%> - Response",
   "description": "查询<%=modelUpperFirstName%>列表 - 应答",
-  "type": "objet",
+  "type": "object",
   "properties": {
     "resultCode": {
       "description": "00000,成功;00001,失败",
@@ -16,6 +16,59 @@
       "description": "成功;失败",
       "type": "string"
    },
+    <% if (needPagination) { %>
+    "resultData": {
+      "type": "object",
+      "properties": {
+        "pageNum": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "totalCount": {
+          "type": "integer"
+        },
+        "totalPage": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "array",
+          "description": "<%=modelUpperFirstName%>列表",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "description": "<%=modelUpperFirstName%>编号"
+              },
+              <% for (let i = 0; i < attrs.length; i++) { %>
+              "<%=attrs[i].name%>": {
+                "type": "<%=attrs[i].type%>",
+                "description": "<%=attrs[i].label%>"
+              }<% if (i !== attrs.length - 1) {%>, <%}%>
+              <%} %>
+            },
+            "required": [
+            "id",
+            <% for (let i = 0; i < attrs.length; i++) {%>
+            "<%=attrs[i].name%>"<% if (i !== attrs.length - 1) {%>, <%}%>
+            <%} %>
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "totalCount",
+        "totalPage",
+        "pageNum",
+        "pageSize",
+        "data"
+      ]
+    }
+  },
+    <% } else { %>
     "resultData": {
       "type": "array",
       "description": "<%=modelUpperFirstName%>列表",
@@ -43,6 +96,7 @@
       "uniqueItems": true
     }
   },
+  <% } %>
   "required": [
     "resultCode",
     "resultMsg",
