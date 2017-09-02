@@ -97,6 +97,11 @@ module.exports = class extends Generator {
       }]
     }, {
       type: 'confirm',
+      name: 'needService',
+      message: '是否生成业务脚本?',
+      default: true
+    }, {
+      type: 'confirm',
       name: 'needTest',
       message: '是否生成测试脚本?',
       default: true
@@ -109,6 +114,8 @@ module.exports = class extends Generator {
       this.options.moduleTitle = (this.options.moduleTitle || answers.moduleTitle)
       // 模型名称
       this.options.modelName = (this.options.modelName || answers.modelName)
+      // 生成业务代码
+      this.options.needService = (this.options.needService || answers.needService)
       // 生成测试文件
       this.options.needTest = (this.options.needTest || answers.needTest)
       // 表单字段
@@ -159,6 +166,7 @@ module.exports = class extends Generator {
     this.config.set('moduleTitle', this.options.moduleTitle)
     this.config.set('modelName', this.options.modelName)
     this.config.set('needTest', this.options.needTest)
+    this.config.set('needService', this.options.needService)
     this.config.set('formFields', this.options.formFields)
     this.config.set('attrs', this.options.attrs)
     this.config.set('actionTypes', this.options.actionTypes)
@@ -182,7 +190,9 @@ module.exports = class extends Generator {
       actionTypes: this.actionTypes
     }
 
-    this._writeComponentFiles()
+    if (this.options.needService) {
+      this._writeComponentFiles()
+    }
     if (this.options.needTest) {
       this._writeTestSpecFiles()
     }
