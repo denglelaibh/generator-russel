@@ -40,13 +40,12 @@ const get<%=modelPluralUpperFirstName%> = async () => {
     const data = {
       pageSize: 10,
       pageNum: 1
-    }
-    expect(data).to.be.jsonSchema(ListRequestSchema)
-    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>', data)
+    };
+    expect(data).to.be.jsonSchema(ListRequestSchema);
+    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>', data);
     <% } else { %>
-    const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>')
-    <% } %>
     const response = await request.post('/<%=moduleName%>/query<%=modelPluralUpperFirstName%>');
+    <% } %>
     distillInfo(response);
     expect(response.data).to.be.jsonSchema(ListResponseSchema);
     expectStatusOK(response);

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "/<%=modelName%>/query<%=modelPluralUpperFirstName%> - Response",
   "description": "查询<%=modelUpperFirstName%>列表 - 应答",
-  "type": "objet",
+  "type": "object",
   "properties": {
     "resultCode": {
       "description": "00000,成功;00001,失败",
