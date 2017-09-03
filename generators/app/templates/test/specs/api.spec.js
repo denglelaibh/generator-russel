@@ -15,12 +15,22 @@ const { accountNo, userName, password, newPassword, setting } = require('../help
 // 引入 service 方法
 //
 const {
+<% if (actionTypes.includeList) { %>
   get<%=modelPluralUpperFirstName%>,
+<% } %>
+<% if (actionTypes.includeRetrieve) { %>
   get<%=modelUpperFirstName%>,
+<% } %>
+<% if (actionTypes.includeCreate) { %>
   make<%=modelUpperFirstName%>,
   post<%=modelUpperFirstName%>,
+<% } %>
+<% if (actionTypes.includeUpdate) { %>
   put<%=modelUpperFirstName%>,
+<% } %>
+<% if (actionTypes.includeDelete) { %>
   delete<%=modelUpperFirstName%>
+<% } %>
 } = require('./service');
 
 // 需要用到的其他模块的方法
@@ -47,6 +57,7 @@ test.before('登录', async t => {
 ///////////////////////////////////////////////////////////////////////////////////////////
 // 测试用例
 //
+<% if (actionTypes.includeList) { %>
 //-------------------------------------<%=modelUpperFirstName%>-----------------------------------------------//
 test('查询全部<%=modelUpperFirstName%>信息', async t => {
   try {
@@ -60,8 +71,9 @@ test('查询全部<%=modelUpperFirstName%>信息', async t => {
     t.fail(err);
   }
 });
-
-test('查询<%=moduleName%>详细信息', async t => {
+<% } %>
+<% if (actionTypes.includeRetrieve) { %>
+test('查询<%=modelUpperFirstName%>详细信息', async t => {
   try {
     let response = await get<%=modelPluralUpperFirstName%>();
     const <%=modelPluralCamelName%> = response.data.resultData;
@@ -76,7 +88,8 @@ test('查询<%=moduleName%>详细信息', async t => {
     t.fail(err);
   }
 });
-
+<% } %>
+<% if (actionTypes.includeCreate) { %>
 /**
  * 添加<%=modelUpperFirstName%>
  */
@@ -99,8 +112,9 @@ test('添加<%=modelUpperFirstName%>信息', async t => {
     t.fail(err);
   }
 });
-
-test('修改<%=moduleName%>信息', async t => {
+<% } %>
+<% if (actionTypes.includeUpdate) { %>
+test('修改<%=modelUpperFirstName%>信息', async t => {
   try {
     let response = await get<%=modelPluralUpperFirstName%>();
     const <%=modelPluralCamelName%> = response.data.resultData;
@@ -123,7 +137,8 @@ test('修改<%=moduleName%>信息', async t => {
     t.fail(err);
   }
 });
-
+<% } %>
+<% if (actionTypes.includeDelete) { %>
 test('删除<%=modelUpperFirstName%>信息', async t => {
   try {
     let response = await get<%=modelPluralUpperFirstName%>();
@@ -144,3 +159,4 @@ test('删除<%=modelUpperFirstName%>信息', async t => {
     t.fail(err);
   }
 });
+<% } %>

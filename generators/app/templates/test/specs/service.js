@@ -16,20 +16,31 @@ const {login} = require('../helpers/login'); // 登录接口
 const {dateTimeLong, dateTimeShort} = require('../helpers/datetime'); // 日期时间格式配置
 
 // institution JSON Schema
+<% if (actionTypes.includeCreate) { %>
 const CreateRequestSchema = require('./create-request.json');
-const CreateResponseSchema = require('./create-response.json');
+  const CreateResponseSchema = require('./create-response.json');
+<% } %>
+<% if (actionTypes.includeRetrieve) { %>
 const RetrieveRequestSchema = require('./retrieve-request.json');
 const RetrieveResponseSchema = require('./retrieve-response.json');
+<% } %>
+<% if (actionTypes.includeUpdate) { %>
 const UpdateRequestSchema = require('./update-request.json');
 const UpdateResponseSchema = require('./update-response.json');
+<% } %>
+<% if (actionTypes.includeDelete) { %>
 const DeleteRequestSchema = require('./delete-request.json');
 const DeleteResponseSchema = require('./delete-response.json');
+<% } %>
+<% if (actionTypes.includeList) { %>
 const ListRequestSchema = require('./list-request.json');
 const ListResponseSchema = require('./list-response.json');
+<% } %>
 
 //
 // <%=modelUpperFirstName%>
 //
+<% if (actionTypes.includeList) { %>
 /**
  * 查询<%=modelUpperFirstName%>列表
  */
@@ -56,7 +67,9 @@ const get<%=modelPluralUpperFirstName%> = async () => {
     return Promise.reject(err);
   }
 };
+<% } %>
 
+<% if (actionTypes.includeRetrieve) { %>
 /**
  * 查询<%=modelUpperFirstName%>详情
  */
@@ -75,7 +88,8 @@ const get<%=modelUpperFirstName%> = async (id) => {
     return Promise.reject(err);
   }
 };
-
+<% } %>
+<% if (actionTypes.includeCreate) { %>
 /**
  * 构造<%=modelUpperFirstName%>实例
  */
@@ -117,7 +131,8 @@ const post<%=modelUpperFirstName%> = async (entity) => {
     return Promise.reject(err);
   }
 };
-
+<% } %>
+<% if (actionTypes.includeUpdate) { %>
 /**
  * 更新<%=modelUpperFirstName%>实例
  * @param entity
@@ -137,7 +152,8 @@ const put<%=modelUpperFirstName%> = async (entity) => {
     return Promise.reject(err);
   }
 };
-
+<% } %>
+<% if (actionTypes.includeDelete) { %>
 /**
  * 删除<%=modelUpperFirstName%>实例
  * @param id
@@ -158,12 +174,22 @@ const delete<%=modelUpperFirstName%> = async (id) => {
     return Promise.reject(err);
   }
 };
-
+<% } %>
 module.exports = {
+  <% if (actionTypes.includeList) { %>
   get<%=modelPluralUpperFirstName%>,
+  <% } %>
+  <% if (actionTypes.includeRetrieve) { %>
   get<%=modelUpperFirstName%>,
+  <% } %>
+  <% if (actionTypes.includeCreate) { %>
   make<%=modelUpperFirstName%>,
   post<%=modelUpperFirstName%>,
+  <% } %>
+  <% if (actionTypes.includeUpdate) { %>
   put<%=modelUpperFirstName%>,
+  <% } %>
+  <% if (actionTypes.includeDelete) { %>
   delete<%=modelUpperFirstName%>
+  <% } %>
 };
