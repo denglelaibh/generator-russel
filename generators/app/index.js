@@ -257,56 +257,71 @@ module.exports = class extends Generator {
    */
   _writeTestSpecFiles () {
     // JSON Schema
-    this.fs.copyTpl(
-      this.templatePath('test/specs/create-request.json'),
-      this.destinationPath(`test/${this.options.moduleName}/create-request.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/create-response.json'),
-      this.destinationPath(`test/${this.options.moduleName}/create-response.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/retrieve-request.json'),
-      this.destinationPath(`test/${this.options.moduleName}/retrieve-request.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/retrieve-response.json'),
-      this.destinationPath(`test/${this.options.moduleName}/retrieve-response.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/update-request.json'),
-      this.destinationPath(`test/${this.options.moduleName}/update-request.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/update-response.json'),
-      this.destinationPath(`test/${this.options.moduleName}/update-response.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/delete-request.json'),
-      this.destinationPath(`test/${this.options.moduleName}/delete-request.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/delete-response.json'),
-      this.destinationPath(`test/${this.options.moduleName}/delete-response.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/list-request.json'),
-      this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
-      this.tplOptions
-    )
-    this.fs.copyTpl(
-      this.templatePath('test/specs/list-response.json'),
-      this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
-      this.tplOptions
-    )
+    if (this.options.actionTypes.includes['includeCreate']) {
+      // 拷贝 create 脚本
+      this.fs.copyTpl(
+        this.templatePath('test/specs/create-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/create-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/create-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/create-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeRetrieve']) {
+      // 拷贝 retrieve 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/retrieve-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/retrieve-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/retrieve-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/retrieve-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeUpdate']) {
+      // 拷贝 update 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/update-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/update-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/update-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/update-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeDelete']) {
+      // 拷贝 delete 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/delete-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/delete-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/delete-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/delete-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeList']) {
+      // 拷贝 list 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/list-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/list-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
+        this.tplOptions
+      )
+    }
     // 测试脚本
     this.fs.copyTpl(
       this.templatePath('test/specs/api.spec.js'),
