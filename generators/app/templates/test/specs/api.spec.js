@@ -15,9 +15,7 @@ const { accountNo, userName, password, newPassword, setting } = require('../help
 // 引入 service 方法
 //
 const {
-<% if (actionTypes.includeList) { %>
   get<%=modelPluralUpperFirstName%>,
-<% } %>
 <% if (actionTypes.includeRetrieve) { %>
   get<%=modelUpperFirstName%>,
 <% } %>
@@ -57,7 +55,6 @@ test.before('登录', async t => {
 ///////////////////////////////////////////////////////////////////////////////////////////
 // 测试用例
 //
-<% if (actionTypes.includeList) { %>
 //-------------------------------------<%=modelUpperFirstName%>-----------------------------------------------//
 test('查询全部<%=modelUpperFirstName%>信息', async t => {
   try {
@@ -71,7 +68,7 @@ test('查询全部<%=modelUpperFirstName%>信息', async t => {
     t.fail(err);
   }
 });
-<% } %>
+
 <% if (actionTypes.includeRetrieve) { %>
 test('查询<%=modelUpperFirstName%>详细信息', async t => {
   try {

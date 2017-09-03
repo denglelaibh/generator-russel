@@ -309,19 +309,17 @@ module.exports = class extends Generator {
         this.tplOptions
       )
     }
-    if (this.options.actionTypes.includes['includeList']) {
-      // 拷贝 list 相关 JSON Schema
-      this.fs.copyTpl(
-        this.templatePath('test/specs/list-request.json'),
-        this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
-        this.tplOptions
-      )
-      this.fs.copyTpl(
-        this.templatePath('test/specs/list-response.json'),
-        this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
-        this.tplOptions
-      )
-    }
+    // 拷贝 list 相关 JSON Schema
+    this.fs.copyTpl(
+      this.templatePath('test/specs/list-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/list-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
+      this.tplOptions
+    )
     // 测试脚本
     this.fs.copyTpl(
       this.templatePath('test/specs/api.spec.js'),

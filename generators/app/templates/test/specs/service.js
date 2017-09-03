@@ -32,15 +32,12 @@ const UpdateResponseSchema = require('./update-response.json');
 const DeleteRequestSchema = require('./delete-request.json');
 const DeleteResponseSchema = require('./delete-response.json');
 <% } %>
-<% if (actionTypes.includeList) { %>
 const ListRequestSchema = require('./list-request.json');
 const ListResponseSchema = require('./list-response.json');
-<% } %>
 
 //
 // <%=modelUpperFirstName%>
 //
-<% if (actionTypes.includeList) { %>
 /**
  * 查询<%=modelUpperFirstName%>列表
  */
@@ -67,7 +64,6 @@ const get<%=modelPluralUpperFirstName%> = async () => {
     return Promise.reject(err);
   }
 };
-<% } %>
 
 <% if (actionTypes.includeRetrieve) { %>
 /**
@@ -176,9 +172,7 @@ const delete<%=modelUpperFirstName%> = async (id) => {
 };
 <% } %>
 module.exports = {
-  <% if (actionTypes.includeList) { %>
   get<%=modelPluralUpperFirstName%>,
-  <% } %>
   <% if (actionTypes.includeRetrieve) { %>
   get<%=modelUpperFirstName%>,
   <% } %>
