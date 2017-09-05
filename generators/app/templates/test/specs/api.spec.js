@@ -47,7 +47,6 @@ test.before('登录', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
@@ -64,7 +63,6 @@ test('查询全部<%=modelUpperFirstName%>信息', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
@@ -81,7 +79,6 @@ test('查询<%=modelUpperFirstName%>详细信息', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
@@ -105,7 +102,6 @@ test('添加<%=modelUpperFirstName%>信息', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
@@ -130,7 +126,6 @@ test('修改<%=modelUpperFirstName%>信息', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
@@ -152,7 +147,6 @@ test('删除<%=modelUpperFirstName%>信息', async t => {
 
     t.pass();
   } catch (err) {
-    console.error(err);
     t.fail(err);
   }
 });
