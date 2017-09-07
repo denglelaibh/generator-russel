@@ -15,7 +15,7 @@ const {accountNo, userName, password, newPassword, setting} = require('../helper
 const {login} = require('../helpers/login'); // 登录接口
 const {dateTimeLong, dateTimeShort} = require('../helpers/datetime'); // 日期时间格式配置
 
-// institution JSON Schema
+// JSON Schema
 <% if (actionTypes.includeCreate) { %>
 const CreateRequestSchema = require('./create-request.json');
   const CreateResponseSchema = require('./create-response.json');
