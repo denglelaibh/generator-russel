@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/query<%=modelPluralUpperFirstName%> - Request Payload",
+  "description": "查询<%=modelUpperFirstName%>列表 - 请求数据",
+  "type": "object",
+  "properties": {
+    "pageNum": {
+      "type": "integer",
+      "description": "分页页码"
+    },
+    "pageSize": {
+      "type": "integer",
+      "description": "分页大小"
+    }
+  },
+  "required": [
+    "pageNum",
+    "pageSize"
+  ]
+}

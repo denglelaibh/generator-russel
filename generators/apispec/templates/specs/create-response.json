@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/save<%=modelUpperFirstName%> - Response",
+  "description": "添加<%=modelUpperFirstName%>信息 - 应答",
+  "type": "object",
+  "properties": {
+    "resultCode": {
+      "description": "00000,成功;00001,失败",
+      "type": "string",
+      "enum": [
+        "00000",
+        "00001"
+      ]
+    },
+    "resultMsg": {
+      "description": "成功;失败",
+      "type": "string"
+    },
+    "resultData": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "description": "<%=modelUpperFirstName%>编号"
+    }
+  },
+  "required": [
+    "resultCode",
+    "resultMsg",
+    "resultData"
+  ]
+}
