@@ -198,7 +198,7 @@ module.exports = class extends Generator {
         this.tplOptions
       )
     }
-    if (this.actionTypes.includeDelete) {
+    if (this.actionTypes.includeList) {
       // 拷贝 list 相关 JSON Schema
       this.fs.copyTpl(
         this.templatePath('specs/list-request.json'),
