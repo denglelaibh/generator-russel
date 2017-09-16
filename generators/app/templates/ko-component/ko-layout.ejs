@@ -57,13 +57,13 @@
 							<% } %>
 							<td>
 								<div>
-									<% if (actionTypes.includes('includeRetrieve')) { %>>
+									<% if (actionTypes.includeRetrieve) { %>>
 									<button class="bs-btn bs-btn-link" data-bind="click: $parent.handleRetrieveDialog.bind($parent)">查看</button>
 									<% } %>>
-									<% if (actionTypes.includes('includeUpdate')) { %>>
+									<% if (actionTypes.includeUpdate) { %>>
 									<button class="bs-btn bs-btn-link" data-bind="click: $parent.handleUpdate.bind($parent)">编辑</button>
 									<% } %>>
-									<% if (actionTypes.includes('includeDelete')) { %>>
+									<% if (actionTypes.includeDelete) { %>>
 									<button data-bind="click: function (data, event) { $parent.handleDelete<%= modelUpperFirstName %>(data, event); }" type="button" role="button" class="bs-btn bs-btn-link">删除</button>
 									<% } %>>
 								</div>

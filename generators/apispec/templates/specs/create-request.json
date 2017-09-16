@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/<%=modelName%>/save<%=modelUpperFirstName%> - Request Payload",
+  "description": "添加<%=modelUpperFirstName%>信息 - 请求",
+  "type": "object",
+  "properties": {
+    <% for (let i = 0; i < attrs.length; i++) { %>
+      "<%=attrs[i].name%>": {
+        "type": "<%=attrs[i].type%>",
+        "description": "<%=attrs[i].label%>"
+      }<% if (i !== attrs.length - 1) { %> , <% } %>
+    <% } %>
+  },
+  "required": [
+    <% for (let i = 0; i < attrs.length; i++) { %>
+    "<%=attrs[i].name%>"<% if (i !== attrs.length - 1) { %> , <% } %>
+    <% } %>
+  ]
+}

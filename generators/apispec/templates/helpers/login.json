@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "/auth/login",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "resultCode": {
+      "description": "响应码",
+      "type": "string"
+    },
+    "resultMsg": {
+      "description": "响应消息",
+      "type": "string"
+    },
+    "resultData": {
+      "type": "object",
+      "properties": {
+        "JSESSIONID": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "JSESSIONID"
+      ]
+    }
+  },
+  "required": [
+    "resultCode",
+    "resultMsg"
+  ]
+}

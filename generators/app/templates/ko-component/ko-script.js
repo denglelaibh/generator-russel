@@ -270,7 +270,7 @@ define(['knockout',
 
       self.isEditing(isEditing);
       if (self.isEditing()) {
-        self.<%= modelCurrentName%>(<%= modelCurrentName>);
+        self.<%= modelCurrentName%>(<%= modelCurrentName%>);
       } else {
         self.<%= modelCurrentName %>(new <%= modelUpperFirstName %>());
       }
