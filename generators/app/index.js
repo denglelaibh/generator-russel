@@ -57,7 +57,7 @@ module.exports = class extends Generator {
     const prompts = [{
       type: 'input',
       name: 'moduleName',
-      message: '模块名称:'
+      message: '功能模块名称:'
     }, {
       type: 'input',
       name: 'modelName',
@@ -69,11 +69,11 @@ module.exports = class extends Generator {
     }, {
       type: 'input',
       name: 'attrs',
-      message: '输入表格显示字段:'
+      message: '用于表格显示的字段[name:type:label]:'
     }, {
       type: 'input',
       name: 'formFields',
-      message: '输入表单查询字段:'
+      message: '用于表单查询字段[name:type:label]:'
     }, {
       type: 'checkbox',
       name: 'actionTypes',
@@ -96,6 +96,28 @@ module.exports = class extends Generator {
         checked: true
       }]
     }, {
+      type: 'list',
+      name: 'queryResult',
+      message: '查询结果是单一结果还是列表?',
+      choices: [{
+        name: '单一结果',
+        value: 'single'
+      }, {
+        name: '多结果列表',
+        value: 'multiple'
+      }]
+    }, {
+      type: 'confirm',
+      name: 'needPagination',
+      message: '是否需要分页?',
+      default: true,
+      when: answers => answers.queryResult === 'multiple'
+    }, {
+      type: 'confirm',
+      name: 'needService',
+      message: '是否生成业务脚本?',
+      default: true
+    }, {
       type: 'confirm',
       name: 'needTest',
       message: '是否生成测试脚本?',
@@ -109,6 +131,8 @@ module.exports = class extends Generator {
       this.options.moduleTitle = (this.options.moduleTitle || answers.moduleTitle)
       // 模型名称
       this.options.modelName = (this.options.modelName || answers.modelName)
+      // 生成业务代码
+      this.options.needService = (this.options.needService || answers.needService)
       // 生成测试文件
       this.options.needTest = (this.options.needTest || answers.needTest)
       // 表单字段
@@ -146,6 +170,10 @@ module.exports = class extends Generator {
         includeDelete: this.options.actionTypes.includes('includeDelete')
       }
       console.log('actionTypes = ', this.actionTypes)
+      // 单一结果还是多项列表
+      this.options.queryResult = (this.options.queryResult || answers.queryResult)
+      // 是否需要分页
+      this.options.needPagination = (this.options.needPagination || answers.needPagination)
 
       done()
     })
@@ -159,9 +187,12 @@ module.exports = class extends Generator {
     this.config.set('moduleTitle', this.options.moduleTitle)
     this.config.set('modelName', this.options.modelName)
     this.config.set('needTest', this.options.needTest)
+    this.config.set('needService', this.options.needService)
     this.config.set('formFields', this.options.formFields)
     this.config.set('attrs', this.options.attrs)
     this.config.set('actionTypes', this.options.actionTypes)
+    this.config.set('queryResult', this.options.queryResult)
+    this.config.set('needPagination', this.options.needPagination)
   }
 
   /**
@@ -179,15 +210,23 @@ module.exports = class extends Generator {
       moduleTitle: this.options.moduleTitle,
       formFields: this.formFields,
       attrs: this.attrs,
-      actionTypes: this.actionTypes
+      actionTypes: this.actionTypes,
+      queryResult: this.options.queryResult,
+      needPagination: this.options.needPagination
     }
 
-    this._writeComponentFiles()
+    if (this.options.needService) {
+      this._writeComponentFiles()
+    }
     if (this.options.needTest) {
       this._writeTestSpecFiles()
     }
   }
 
+  /**
+   * 生成组件相关文件
+   * @private
+   */
   _writeComponentFiles () {
 // Copy js file
     //
@@ -217,16 +256,79 @@ module.exports = class extends Generator {
    * 写入自动化测试脚本文件
    */
   _writeTestSpecFiles () {
-    // jsonschema - list
+    // JSON Schema
+    if (this.options.actionTypes.includes['includeCreate']) {
+      // 拷贝 create 脚本
+      this.fs.copyTpl(
+        this.templatePath('test/specs/create-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/create-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/create-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/create-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeRetrieve']) {
+      // 拷贝 retrieve 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/retrieve-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/retrieve-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/retrieve-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/retrieve-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeUpdate']) {
+      // 拷贝 update 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/update-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/update-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/update-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/update-response.json`),
+        this.tplOptions
+      )
+    }
+    if (this.options.actionTypes.includes['includeDelete']) {
+      // 拷贝 delete 相关 JSON Schema
+      this.fs.copyTpl(
+        this.templatePath('test/specs/delete-request.json'),
+        this.destinationPath(`test/${this.options.moduleName}/delete-request.json`),
+        this.tplOptions
+      )
+      this.fs.copyTpl(
+        this.templatePath('test/specs/delete-response.json'),
+        this.destinationPath(`test/${this.options.moduleName}/delete-response.json`),
+        this.tplOptions
+      )
+    }
+    // 拷贝 list 相关 JSON Schema
     this.fs.copyTpl(
-      this.templatePath('specs/list.json'),
-      this.destinationPath(`test/${this.options.moduleName}/list.json`),
+      this.templatePath('test/specs/list-request.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-request.json`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/list-response.json'),
+      this.destinationPath(`test/${this.options.moduleName}/list-response.json`),
       this.tplOptions
     )
     // 测试脚本
     this.fs.copyTpl(
-      this.templatePath('specs/api.spec.js'),
+      this.templatePath('test/specs/api.spec.js'),
       this.destinationPath(`test/${this.options.moduleName}/api.spec.js`),
+      this.tplOptions
+    )
+    this.fs.copyTpl(
+      this.templatePath('test/specs/service.js'),
+      this.destinationPath(`test/${this.options.moduleName}/service.js`),
       this.tplOptions
     )
   }
@@ -254,12 +356,14 @@ module.exports = class extends Generator {
       //   yarn: hasYarn
       // })
     }
+    if (!this.options['skip-css-compile']) {
+      this.spawnCommand('npm', ['run', 'css-compile'])
+    }
   }
 
   /**
    * 最后调用, 清理工作
    */
   end () {
-
   }
 }

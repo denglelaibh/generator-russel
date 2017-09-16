@@ -91,6 +91,7 @@ define(['knockout',
     <% if (actionTypes.includeCreate || actionTypes.includeRetrieve || actionTypes.includeUpdate) { %>
     this.<%= modelCurrentName %> = ko.observable(); // 当前新增的<%= modelUpperFirstName %>对象
     <% }%>
+    this.isEditing = ko.observable(); // 新增 or 编辑
 
     // 表单字段 - chosenXXX
     //
@@ -262,14 +263,26 @@ define(['knockout',
     /**
      * 显示添加 <%= modelName %>对话框
      */
-    show<%= modelUpperFirstName %>Dialog: function () {
+    show<%= modelUpperFirstName %>Dialog: function (params) {
       var self = this;
-      self.<%= modelCurrentName %>(new <%= modelUpperFirstName %>());
+      var <%= modelCurrentName%> = params.<%= modelCurrentName%>;
+      var isEditing = params.isEditing;
+
+      self.isEditing(isEditing);
+      if (self.isEditing()) {
+        self.<%= modelCurrentName%>(<%= modelCurrentName%>);
+      } else {
+        self.<%= modelCurrentName %>(new <%= modelUpperFirstName %>());
+      }
 
       $('#<%= modelKebabName %>Dialog').one('shown', function (e) {
       }).one('hidden', function (e, currentTarget) {
         if (currentTarget === 'save') {
-          self.add<%= modelUpperFirstName %>(self.<%= modelCurrentName %>());
+          if (self.isEditing()) {
+            self.modify<%= modelUpperFirstName %>(self.<%= modelCurrentName %>());
+          } else {
+            self.add<%= modelUpperFirstName %>(self.<%= modelCurrentName %>());
+          }
         }
       }).modal({
         show: true,
@@ -309,6 +322,40 @@ define(['knockout',
         }
       });
     },
+  <% } %>
+
+  <% if (actionTypes.includeRetrieve) { %>
+  /**
+   * 显示<%= modelName %>详情对话框
+   */
+  handleRetrieveDialog: function (entity) {
+    var self = this;
+    self.<%= modelCurrentName %>(entity);
+
+    $('#view-<%= modelKebabName %>-dialog').one('shown', function (e) {
+    }).one('hidden', function (e, currentTarget) {
+    }).modal({
+      show: true,
+      backdrop: true
+    });
+  },
+  <% } %>
+
+  <% if (actionTypes.includeUpdate) { %>
+  /**
+   * 显示<%= modelName %>编辑对话框
+   */
+  handleUpdateDialog: function (entity) {
+    var self = this;
+    self.<%= modelCurrentName %>(entity);
+
+    $('#view-<%= modelKebabName %>-dialog').one('shown', function (e) {
+    }).one('hidden', function (e, currentTarget) {
+    }).modal({
+      show: true,
+      backdrop: true
+    });
+  },
   <% } %>
 
   <% if (actionTypes.includeDelete) { %>
