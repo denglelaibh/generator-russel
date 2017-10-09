@@ -1,1 +1,0 @@
-# design starter kit
