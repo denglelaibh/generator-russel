@@ -34,8 +34,11 @@ define(['knockout',
     var self = this;
     <% for(var i = 0; i < attrs.length; i++) { %>
       self.<%= attrs[i].name %> = ko.observable(param.<%= attrs[i].name %>
-        <% if (attrs[i].type.toLowerCase() === 'string')  { %> || ''); <% }%>
-        <% if (attrs[i].type.toLowerCase() === 'integer') { %> || 0); <% }%>
+        <% if (attrs[i].type.toLowerCase() === 'integer') { %>
+          || 0);
+        <% } else { %>
+         || '');
+        <% }%>
     <% } %>
     // 有 ID 字段才传
     if (param.id || param.id === 0) {
@@ -125,6 +128,7 @@ define(['knockout',
     this.pageSize = ko.observable(10);
     this.showPaginationTemplate = ko.observable(false);
     this.nodata = ko.observable(true);
+    this.resultData = ko.observable({});
 
     PaginationViewModel.apply(self, [function (pageNum, pageHandler) {
       pageHandler.call(self, self.resultData());
